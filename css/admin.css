@@ -1,0 +1,369 @@
+/**
+ * KK Bulk Date Updates - Admin Styles
+ * 
+ * @package KK_Bulk_Date_Updates
+ * @version 0.0.2
+ */
+
+/* Admin page container */
+.kk-bulk-date-updates-admin {
+    max-width: 1200px;
+    margin: 20px 0;
+}
+
+.kk-bulk-date-updates-admin h1 {
+    margin-bottom: 20px;
+    color: #23282d;
+}
+
+/* Form styles */
+.kk-bulk-date-updates-form {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.kk-bulk-date-updates-form h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #23282d;
+}
+
+.kk-bulk-date-updates-form .form-table {
+    margin-bottom: 20px;
+}
+
+.kk-bulk-date-updates-form .form-table th {
+    width: 200px;
+    padding: 15px 10px 15px 0;
+    vertical-align: top;
+}
+
+.kk-bulk-date-updates-form .form-table td {
+    padding: 15px 10px;
+}
+
+/* Button styles */
+.kk-bulk-date-updates-button {
+    background: #0073aa;
+    border: 1px solid #0073aa;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+
+.kk-bulk-date-updates-button:hover {
+    background: #005a87;
+    border-color: #005a87;
+    color: #fff;
+}
+
+.kk-bulk-date-updates-button:disabled {
+    background: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Progress indicator */
+.kk-bulk-date-updates-progress {
+    display: none;
+    margin: 15px 0;
+}
+
+.kk-bulk-date-updates-progress-bar {
+    width: 100%;
+    height: 20px;
+    background: #f1f1f1;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.kk-bulk-date-updates-progress-fill {
+    height: 100%;
+    background: #0073aa;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Messages */
+.kk-bulk-date-updates-message {
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 4px;
+    border-left: 4px solid;
+    clear: both;
+}
+
+.kk-bulk-date-updates-message.success {
+    background: #f7fcfe;
+    border-left-color: #00a32a;
+    color: #00a32a;
+}
+
+.kk-bulk-date-updates-message.error {
+    background: #fcf2f2;
+    border-left-color: #d63638;
+    color: #d63638;
+}
+
+.kk-bulk-date-updates-message.warning {
+    background: #fcf9e8;
+    border-left-color: #dba617;
+    color: #dba617;
+}
+
+/* Message positioning below form */
+.kk-bulk-date-updates-form .submit + .kk-bulk-date-updates-message {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Loading spinner */
+.kk-bulk-date-updates-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #0073aa;
+    border-radius: 50%;
+    animation: kk-spin 1s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@keyframes kk-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Date fields styling */
+.kk-date-fields-container label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.kk-date-fields-container label input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.kk-date-fields-container label input[type="checkbox"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.kk-date-fields-container label:has(input[type="checkbox"]:disabled) {
+    opacity: 0.7;
+    color: #666;
+}
+
+.kk-date-fields-container label:has(input[type="checkbox"]:disabled) .kk-modified-date-offset {
+    opacity: 1;
+    color: #1d2327;
+}
+
+.kk-modified-date-offset {
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.kk-modified-date-offset input[type="number"] {
+    width: 60px;
+    text-align: center;
+}
+
+/* Preview results styles */
+.kk-preview-container {
+    margin: 30px 0;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.kk-preview-results h3 {
+    margin-top: 0;
+    color: #1d2327;
+    font-size: 18px;
+    border-bottom: 1px solid #e1e1e1;
+    padding-bottom: 10px;
+}
+
+.kk-preview-results p {
+    margin: 10px 0;
+}
+
+.kk-preview-results table {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.kk-preview-results table th {
+    background-color: #f6f7f7;
+    font-weight: 600;
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid #c3c4c7;
+}
+
+.kk-preview-results table td {
+    vertical-align: top;
+    padding: 12px 10px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.kk-preview-results table td strong {
+    color: #1d2327;
+    font-weight: 600;
+}
+
+.kk-preview-results table td small {
+    color: #646970;
+    font-size: 12px;
+}
+
+.kk-preview-results em {
+    color: #646970;
+    font-style: italic;
+}
+
+.kk-preview-results table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Activity log styles */
+#kk-recent-activity-section {
+    margin-top: 30px;
+}
+
+#kk-activity-log-container {
+    margin-top: 15px;
+}
+
+#kk-activity-log-table {
+    width: 100%;
+}
+
+#kk-activity-log-table th {
+    background-color: #f6f7f7;
+    font-weight: 600;
+    padding: 12px 10px;
+    border-bottom: 1px solid #c3c4c7;
+}
+
+#kk-activity-log-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #e1e1e1;
+    vertical-align: top;
+}
+
+#kk-activity-log-table td strong {
+    color: #1d2327;
+    font-weight: 600;
+}
+
+#kk-activity-log-table td small {
+    color: #646970;
+    font-size: 12px;
+}
+
+/* Date change formatting in activity log */
+#kk-activity-log-table .date-change {
+    font-size: 12px;
+    color: #646970;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+#kk-activity-log-table .date-change:last-child {
+    margin-bottom: 0;
+}
+
+#kk-activity-log-table .date-change strong {
+    color: #1d2327;
+    font-size: 12px;
+}
+
+#kk-activity-log-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+#kk-no-activity-row td {
+    text-align: center;
+    color: #646970;
+    font-style: italic;
+    padding: 20px;
+}
+
+/* Activity log animation for new entries */
+#kk-activity-log-tbody tr:not(#kk-no-activity-row) {
+    animation: kk-fade-in 0.3s ease-in;
+}
+
+@keyframes kk-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .kk-bulk-date-updates-admin {
+        margin: 10px;
+    }
+    
+    .kk-bulk-date-updates-form {
+        padding: 15px;
+    }
+    
+    .kk-bulk-date-updates-form .form-table th {
+        width: auto;
+        display: block;
+        padding-bottom: 5px;
+    }
+    
+    .kk-bulk-date-updates-form .form-table td {
+        display: block;
+        padding-top: 0;
+    }
+    
+    .kk-date-fields-container label {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .kk-modified-date-offset {
+        margin-left: 0;
+        margin-top: 5px;
+    }
+    
+    .kk-preview-container {
+        margin: 20px 0;
+        padding: 15px;
+    }
+    
+    .kk-preview-results table {
+        font-size: 14px;
+    }
+    
+    .kk-preview-results table th,
+    .kk-preview-results table td {
+        padding: 8px 6px;
+    }
+} 
