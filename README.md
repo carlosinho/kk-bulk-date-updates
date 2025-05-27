@@ -5,12 +5,18 @@ A comprehensive WordPress plugin for bulk updating dates across posts and conten
 ## Features
 
 - **Backend-Only Plugin**: Focused exclusively on admin functionality for bulk date updates
-- **Multiple Update Methods**: Set specific dates, add/subtract days, or assign random dates within a range
+- **Multiple Update Methods**: 
+  - ✅ Add/subtract days from existing dates
+  - ✅ Match modified dates to published dates with offset
+  - 🚧 Set specific dates (TBA)
+  - 🚧 Assign random dates within a range (TBA)
 - **Post Type Support**: Works with all public post types (posts, pages, custom post types)
-- **Date Field Options**: Update published dates or modified dates
+- **Date Field Options**: Update published dates, modified dates, or both
 - **Safety Features**: Test mode (dry run), post limits, and comprehensive validation
 - **AJAX Interface**: Modern, responsive admin interface with progress indicators
+- **Activity Logging**: Track recent bulk update operations with detailed information
 - **Security**: Proper nonce verification, capability checks, and data sanitization
+- **Performance Optimized**: Batch processing, memory management, and efficient database operations
 - **Internationalization**: Ready for translation with proper text domains
 
 ## File Structure
@@ -47,17 +53,19 @@ The plugin adds a new page under **Tools > Bulk Date Updates** with the followin
 - **Limit Posts**: Set maximum number of posts to update (safety feature)
 
 #### Date Update Options
-- **Date Field**: Choose between published date or modified date
+- **Date Fields**: Choose between published date, modified date, or both
+- **Modified Date Offset**: When updating modified dates, add a specified number of minutes offset
 - **Update Method**: 
-  - Set Specific Date: Assign the same date/time to all selected posts
-  - Add Days: Add a specified number of days to existing dates
-  - Subtract Days: Subtract a specified number of days from existing dates
-  - Random Date Range: Assign random dates within a specified range
+  - ✅ **Add Days**: Add a specified number of days to existing dates
+  - ✅ **Subtract Days**: Subtract a specified number of days from existing dates
+  - ✅ **Match Modified to Published**: Set modified dates to match published dates (with optional offset)
+  - 🚧 **Set Specific Date**: Assign the same date/time to all selected posts (TBA)
+  - 🚧 **Random Date Range**: Assign random dates within a specified range (TBA)
 
 #### Safety Features
 - **Test Mode**: Preview changes without actually updating (recommended)
 - **Progress Indicator**: Visual feedback during bulk operations
-- **Activity Log**: Track recent bulk update operations
+- **Activity Log**: Track recent bulk update operations with detailed information
 
 ### JavaScript Functionality
 
@@ -66,17 +74,19 @@ The plugin adds a new page under **Tools > Bulk Date Updates** with the followin
 - AJAX form submission with progress tracking
 - Real-time validation and user feedback
 - Loading indicators and error handling
+- Form reset functionality
 
 ## WordPress Coding Standards
 
 This plugin follows WordPress coding standards and best practices:
 
 - **Security**: Proper nonce verification, capability checks, and data sanitization
-- **Database**: Uses WordPress database abstraction layer (`$wpdb`)
+- **Database**: Uses WordPress database abstraction layer (`$wpdb`) with prepared statements
 - **Hooks**: Utilizes WordPress action and filter hooks for extensibility
 - **Internationalization**: All strings are translatable using `__()` and `_e()` functions
 - **Asset Management**: Proper enqueueing of scripts and styles
 - **Error Handling**: Comprehensive error handling and logging
+- **Performance**: Optimized database queries, batch processing, and memory management
 
 ## Development
 
@@ -129,9 +139,10 @@ add_filter('kk_bulk_date_updates_methods', function($methods) {
 ## Performance
 
 - Efficient database queries with proper indexing
-- Batch processing for large datasets
+- Batch processing for large datasets (handles 1000+ posts)
 - Progress tracking for long-running operations
 - Optimized asset loading (only on relevant admin pages)
+- Memory management for large operations (requires 512MB+ for 1000+ posts)
 
 ## Browser Support
 
@@ -152,13 +163,28 @@ GPL v2 or later
 
 ## Changelog
 
-### Version 1.0.0
-- Initial release
-- Basic bulk date update functionality
-- Admin interface with AJAX support
-- Security and safety features
-- Internationalization support
+### Version 0.0.2 (Current)
+- ✅ Add Days functionality
+- ✅ Subtract Days functionality  
+- ✅ Match Modified to Published functionality
+- ✅ Test mode (dry run) with detailed preview
+- ✅ Activity logging system
+- ✅ Performance optimizations for large datasets
+- ✅ Enhanced security and validation
+- ✅ AJAX interface with progress tracking
+- 🚧 Set Specific Date method (TBA)
+- 🚧 Random Date Range method (TBA)
+
+### Version 1.0.0 (Planned)
+- 🚧 Set Specific Date functionality
+- 🚧 Random Date Range functionality
+- 🚧 Additional update methods
+- 🚧 Enhanced filtering options
 
 ## Support
 
-For support and feature requests, please contact the plugin author or submit issues through the appropriate channels. 
+For support and feature requests, please contact the plugin author or submit issues through the appropriate channels.
+
+## Legend
+- ✅ Implemented and working
+- 🚧 To Be Announced (TBA) - Not yet implemented 
