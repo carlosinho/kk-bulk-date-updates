@@ -3,7 +3,7 @@
  * Admin Page Template
  * 
  * @package KK_Bulk_Date_Updates
- * @version 0.0.2
+ * @version 0.1.0
  */
 
 // Prevent direct access
@@ -46,7 +46,80 @@ if (!defined('ABSPATH')) {
                                 }
                             }
                             ?>
-                            <p class="description"><?php _e('Select which post types to update.', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description"><?php _e('Select which post types to update.', 'kk-bulk-date-updates'); ?> <?php _e('This plugin only works with published content. Draft, private, and pending posts are not affected.', 'kk-bulk-date-updates'); ?></p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">
+                            <label for="content_filter"><?php _e('Content Filters', 'kk-bulk-date-updates'); ?></label>
+                        </th>
+                        <td>
+                            <select name="content_filter" id="content_filter">
+                                <option value="none"><?php _e('No Filter (All Content)', 'kk-bulk-date-updates'); ?></option>
+                                <option value="date_range"><?php _e('Published Date Range', 'kk-bulk-date-updates'); ?></option>
+                                <option value="count_limit"><?php _e('Latest/Oldest Posts', 'kk-bulk-date-updates'); ?></option>
+                                <option value="category_tag"><?php _e('Category/Tag Filter', 'kk-bulk-date-updates'); ?></option>
+                            </select>
+                            <p class="description"><?php _e('Filter which content to include in the bulk update.', 'kk-bulk-date-updates'); ?></p>
+                            
+                            <!-- Date Range Filter -->
+                            <div id="filter_date_range_options" class="kk-filter-options" style="display: none; margin-top: 10px;">
+                                <label><?php _e('Published between:', 'kk-bulk-date-updates'); ?></label><br>
+                                <input type="date" name="filter_date_start" id="filter_date_start" class="regular-text">
+                                <span><?php _e('and', 'kk-bulk-date-updates'); ?></span>
+                                <input type="date" name="filter_date_end" id="filter_date_end" class="regular-text">
+                                <p class="description"><?php _e('Only update content published within this date range.', 'kk-bulk-date-updates'); ?></p>
+                            </div>
+                            
+                            <!-- Count Limit Filter -->
+                            <div id="filter_count_limit_options" class="kk-filter-options" style="display: none; margin-top: 10px;">
+                                <label><?php _e('Update only:', 'kk-bulk-date-updates'); ?></label><br>
+                                <input type="number" name="filter_count" id="filter_count" min="1" max="1000" value="10" class="small-text">
+                                <label>
+                                    <input type="radio" name="filter_order" value="latest" checked> <?php _e('Latest posts', 'kk-bulk-date-updates'); ?>
+                                </label>
+                                <label>
+                                    <input type="radio" name="filter_order" value="oldest"> <?php _e('Oldest posts', 'kk-bulk-date-updates'); ?>
+                                </label>
+                                <p class="description"><?php _e('Limit the update to a specific number of latest or oldest posts.', 'kk-bulk-date-updates'); ?></p>
+                            </div>
+                            
+                            <!-- Category/Tag Filter -->
+                            <div id="filter_category_tag_options" class="kk-filter-options" style="display: none; margin-top: 10px;">
+                                <div id="kk-taxonomy-selectors">
+                                    <!-- Categories (for posts) -->
+                                    <div class="kk-taxonomy-group" data-post-type="post">
+                                        <label><?php _e('Categories:', 'kk-bulk-date-updates'); ?></label><br>
+                                        <select name="filter_categories[]" id="filter_categories" multiple size="4" style="min-width: 300px;">
+                                            <?php
+                                            $categories = get_categories(array('hide_empty' => false));
+                                            foreach ($categories as $category) {
+                                                echo '<option value="' . esc_attr($category->term_id) . '">' . esc_html($category->name) . ' (' . $category->count . ')</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="kk-taxonomy-group" data-post-type="post" style="margin-top: 10px;">
+                                        <label><?php _e('Tags:', 'kk-bulk-date-updates'); ?></label><br>
+                                        <select name="filter_tags[]" id="filter_tags" multiple size="4" style="min-width: 300px;">
+                                            <?php
+                                            $tags = get_tags(array('hide_empty' => false));
+                                            foreach ($tags as $tag) {
+                                                echo '<option value="' . esc_attr($tag->term_id) . '">' . esc_html($tag->name) . ' (' . $tag->count . ')</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Pages (no categories/tags by default) -->
+                                    <div class="kk-taxonomy-group" data-post-type="page" style="display: none;">
+                                        <p><em><?php _e('Pages do not have categories or tags by default.', 'kk-bulk-date-updates'); ?></em></p>
+                                    </div>
+                                </div>
+                                <p class="description"><?php _e('Select categories or tags to filter content. Hold Ctrl/Cmd to select multiple.', 'kk-bulk-date-updates'); ?></p>
+                            </div>
                         </td>
                     </tr>
                     
@@ -128,26 +201,11 @@ if (!defined('ABSPATH')) {
                     
                     <tr>
                         <th scope="row">
-                            <label for="post_status"><?php _e('Post Status', 'kk-bulk-date-updates'); ?></label>
-                        </th>
-                        <td>
-                            <select name="post_status[]" id="post_status" multiple size="4">
-                                <option value="publish" selected><?php _e('Published', 'kk-bulk-date-updates'); ?></option>
-                                <option value="draft"><?php _e('Draft', 'kk-bulk-date-updates'); ?></option>
-                                <option value="private"><?php _e('Private', 'kk-bulk-date-updates'); ?></option>
-                                <option value="pending"><?php _e('Pending Review', 'kk-bulk-date-updates'); ?></option>
-                            </select>
-                            <p class="description"><?php _e('OTHER POST TYPES UNTESTED! Select which post statuses to include. Hold Ctrl/Cmd to select multiple.', 'kk-bulk-date-updates'); ?></p>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <th scope="row">
                             <label for="limit_posts"><?php _e('Limit Posts', 'kk-bulk-date-updates'); ?></label>
                         </th>
                         <td>
                             <input type="number" name="limit_posts" id="limit_posts" min="1" max="10000" value="100" class="small-text">
-                            <p class="description"><?php _e('Maximum number of posts to update (for safety).', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description"><?php _e('Maximum number of posts to update (for safety). This applies after content filters.', 'kk-bulk-date-updates'); ?></p>
                         </td>
                     </tr>
                     
@@ -301,5 +359,59 @@ jQuery(document).ready(function($) {
             $submitBtn.val('<?php _e('Update Dates', 'kk-bulk-date-updates'); ?>');
         }
     });
+    
+    // Handle content filter changes
+    $('#content_filter').on('change', function() {
+        const filterType = $(this).val();
+        
+        // Hide all filter options
+        $('.kk-filter-options').hide();
+        
+        // Show relevant filter options
+        switch(filterType) {
+            case 'date_range':
+                $('#filter_date_range_options').show();
+                break;
+            case 'count_limit':
+                $('#filter_count_limit_options').show();
+                break;
+            case 'category_tag':
+                $('#filter_category_tag_options').show();
+                updateTaxonomyVisibility();
+                break;
+        }
+    });
+    
+    // Handle post type changes to show/hide relevant taxonomies
+    $('input[name="post_types[]"]').on('change', function() {
+        updateTaxonomyVisibility();
+    });
+    
+    function updateTaxonomyVisibility() {
+        const selectedPostTypes = $('input[name="post_types[]"]:checked').map(function() {
+            return this.value;
+        }).get();
+        
+        // Hide all taxonomy groups
+        $('.kk-taxonomy-group').hide();
+        
+        // Show taxonomy groups for selected post types
+        selectedPostTypes.forEach(function(postType) {
+            $('.kk-taxonomy-group[data-post-type="' + postType + '"]').show();
+        });
+        
+        // If no post types are selected or only non-post types, show a message
+        if (selectedPostTypes.length === 0 || (selectedPostTypes.length === 1 && !selectedPostTypes.includes('post'))) {
+            if (selectedPostTypes.includes('page') && selectedPostTypes.length === 1) {
+                $('.kk-taxonomy-group[data-post-type="page"]').show();
+            }
+        }
+    }
+    
+    // Initialize content filter state
+    $('#content_filter').trigger('change');
+    
+    // Initialize taxonomy visibility
+    updateTaxonomyVisibility();
 });
 </script> 

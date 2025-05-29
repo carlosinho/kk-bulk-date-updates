@@ -3,7 +3,7 @@
  * Plugin Name: Bulk Date Updates by KK
  * Plugin URI: https://karol.cc/
  * Description: A WordPress plugin for bulk updating dates across posts and pages.
- * Version: 0.0.2
+ * Version: 0.1.0
  * Author: Karol K
  * Author URI: https://karol.cc/
  * License: GPL v2 or later
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('KK_BULK_DATE_UPDATES_VERSION', '1.0.0');
+define('KK_BULK_DATE_UPDATES_VERSION', '0.1.0');
 define('KK_BULK_DATE_UPDATES_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('KK_BULK_DATE_UPDATES_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('KK_BULK_DATE_UPDATES_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -230,15 +230,42 @@ class KK_Bulk_Date_Updates {
             ? absint($post_data['days_value']) 
             : 1;
             
-        // Post status
-        $sanitized['post_status'] = isset($post_data['post_status']) && is_array($post_data['post_status']) 
-            ? array_map('sanitize_text_field', $post_data['post_status']) 
-            : array('publish');
+        // Post status - hardcoded to only work with published content
+        $sanitized['post_status'] = array('publish');
             
         // Limit posts
         $sanitized['limit_posts'] = isset($post_data['limit_posts']) 
             ? min(absint($post_data['limit_posts']), 10000) 
             : 100;
+            
+        // Content filters
+        $sanitized['content_filter'] = isset($post_data['content_filter']) 
+            ? sanitize_text_field($post_data['content_filter']) 
+            : 'none';
+            
+        // Date range filter
+        $sanitized['filter_date_start'] = isset($post_data['filter_date_start']) 
+            ? sanitize_text_field($post_data['filter_date_start']) 
+            : '';
+        $sanitized['filter_date_end'] = isset($post_data['filter_date_end']) 
+            ? sanitize_text_field($post_data['filter_date_end']) 
+            : '';
+            
+        // Count limit filter
+        $sanitized['filter_count'] = isset($post_data['filter_count']) 
+            ? absint($post_data['filter_count']) 
+            : 10;
+        $sanitized['filter_order'] = isset($post_data['filter_order']) 
+            ? sanitize_text_field($post_data['filter_order']) 
+            : 'latest';
+            
+        // Category/tag filter
+        $sanitized['filter_categories'] = isset($post_data['filter_categories']) && is_array($post_data['filter_categories']) 
+            ? array_map('absint', $post_data['filter_categories']) 
+            : array();
+        $sanitized['filter_tags'] = isset($post_data['filter_tags']) && is_array($post_data['filter_tags']) 
+            ? array_map('absint', $post_data['filter_tags']) 
+            : array();
             
         // Dry run
         $sanitized['dry_run'] = isset($post_data['dry_run']) && $post_data['dry_run'] === '1';
@@ -273,6 +300,43 @@ class KK_Bulk_Date_Updates {
 
         }
         
+        // Validate content filter specific requirements
+        switch ($form_data['content_filter']) {
+            case 'date_range':
+                if (empty($form_data['filter_date_start']) || empty($form_data['filter_date_end'])) {
+                    return array(
+                        'valid' => false,
+                        'message' => __('Please provide both start and end dates for date range filter', 'kk-bulk-date-updates')
+                    );
+                }
+                
+                if (strtotime($form_data['filter_date_start']) > strtotime($form_data['filter_date_end'])) {
+                    return array(
+                        'valid' => false,
+                        'message' => __('Start date must be before end date', 'kk-bulk-date-updates')
+                    );
+                }
+                break;
+                
+            case 'count_limit':
+                if ($form_data['filter_count'] < 1 || $form_data['filter_count'] > 1000) {
+                    return array(
+                        'valid' => false,
+                        'message' => __('Please enter a valid number between 1 and 1000 for count limit filter', 'kk-bulk-date-updates')
+                    );
+                }
+                break;
+                
+            case 'category_tag':
+                if (empty($form_data['filter_categories']) && empty($form_data['filter_tags'])) {
+                    return array(
+                        'valid' => false,
+                        'message' => __('Please select at least one category or tag for category/tag filter', 'kk-bulk-date-updates')
+                    );
+                }
+                break;
+        }
+        
         return array('valid' => true);
     }
     
@@ -292,6 +356,61 @@ class KK_Bulk_Date_Updates {
             'update_post_term_cache' => false, // Skip term cache
             'suppress_filters' => true // Skip filters for better performance
         );
+        
+        // Apply content filters
+        switch ($form_data['content_filter']) {
+            case 'date_range':
+                if (!empty($form_data['filter_date_start']) && !empty($form_data['filter_date_end'])) {
+                    $args['date_query'] = array(
+                        array(
+                            'after' => $form_data['filter_date_start'],
+                            'before' => $form_data['filter_date_end'],
+                            'inclusive' => true,
+                        ),
+                    );
+                }
+                break;
+                
+            case 'count_limit':
+                if (!empty($form_data['filter_count'])) {
+                    $args['posts_per_page'] = min($form_data['filter_count'], $form_data['limit_posts']);
+                    $args['order'] = ($form_data['filter_order'] === 'oldest') ? 'ASC' : 'DESC';
+                }
+                break;
+                
+            case 'category_tag':
+                $tax_query = array();
+                
+                // Add category filter if categories are selected
+                if (!empty($form_data['filter_categories'])) {
+                    $tax_query[] = array(
+                        'taxonomy' => 'category',
+                        'field'    => 'term_id',
+                        'terms'    => $form_data['filter_categories'],
+                        'operator' => 'IN',
+                    );
+                }
+                
+                // Add tag filter if tags are selected
+                if (!empty($form_data['filter_tags'])) {
+                    $tax_query[] = array(
+                        'taxonomy' => 'post_tag',
+                        'field'    => 'term_id',
+                        'terms'    => $form_data['filter_tags'],
+                        'operator' => 'IN',
+                    );
+                }
+                
+                // Set relation if both categories and tags are selected
+                if (count($tax_query) > 1) {
+                    $tax_query['relation'] = 'OR'; // Posts matching ANY of the selected categories OR tags
+                }
+                
+                if (!empty($tax_query)) {
+                    $args['tax_query'] = $tax_query;
+                }
+                break;
+        }
         
         $query = new WP_Query($args);
         return $query->posts;

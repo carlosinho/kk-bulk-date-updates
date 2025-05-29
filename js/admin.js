@@ -2,7 +2,7 @@
  * KK Bulk Date Updates - Admin JavaScript
  * 
  * @package KK_Bulk_Date_Updates
- * @version 0.0.2
+ * @version 0.1.0
  */
 
 (function($) {
@@ -112,6 +112,9 @@
             this.clearMessages();
             this.clearPreview();
             
+            // Store reference to this for use in callbacks
+            const self = this;
+            
             // Make AJAX request
             $.ajax({
                 url: kkBulkDateUpdates.ajaxUrl,
@@ -119,18 +122,19 @@
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: this.handleAjaxSuccess.bind(this),
-                error: this.handleAjaxError.bind(this),
+                success: function(response) {
+                    self.handleAjaxSuccess(response);
+                },
+                error: function(xhr, status, error) {
+                    self.handleAjaxError(xhr, status, error);
+                },
                 complete: function() {
+                    // Always re-enable button and hide loading, regardless of success/failure
                     $submitButton.prop('disabled', false);
-                    KKBulkDateUpdatesAdmin.hideLoading($submitButton);
+                    self.hideLoading($submitButton);
                 }
             });
         },
-
-
-
-
 
         /**
          * Handle reset functionality
@@ -176,8 +180,6 @@
             });
         },
 
-
-
         /**
          * Handle AJAX success
          */
@@ -197,21 +199,22 @@
                 }
                 
                 // Handle specific response data
-                if (response.data.redirect) {
+                if (response.data && response.data.redirect) {
                     window.location.href = response.data.redirect;
                 }
                 
-                if (response.data.reload) {
+                if (response.data && response.data.reload) {
                     window.location.reload();
                 }
                 
                 // Update progress if available
-                if (response.data.progress) {
+                if (response.data && response.data.progress) {
                     this.updateProgress(response.data.progress);
                 }
             } else {
-                // Show error messages below form as well
-                this.showMessage(response.data.message || kkBulkDateUpdates.strings.error, 'error', true);
+                // Show error messages below form as well - handle both data.message and direct message
+                const errorMessage = (response.data && response.data.message) || response.message || kkBulkDateUpdates.strings.error;
+                this.showMessage(errorMessage, 'error', true);
             }
         },
 
@@ -219,8 +222,32 @@
          * Handle AJAX error
          */
         handleAjaxError: function(xhr, status, error) {
-            console.error('AJAX Error:', status, error);
-            this.showMessage(kkBulkDateUpdates.strings.error, 'error');
+            console.error('AJAX Error:', status, error, xhr.responseText);
+            
+            let errorMessage = kkBulkDateUpdates.strings.error;
+            
+            // Try to get more specific error message
+            if (xhr.responseText) {
+                try {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.data && response.data.message) {
+                        errorMessage = response.data.message;
+                    } else if (response.message) {
+                        errorMessage = response.message;
+                    }
+                } catch (e) {
+                    // If parsing fails, check for common HTTP errors
+                    if (xhr.status === 403) {
+                        errorMessage = 'Permission denied. Please refresh the page and try again.';
+                    } else if (xhr.status === 500) {
+                        errorMessage = 'Server error occurred. Please try again.';
+                    } else if (xhr.status === 0) {
+                        errorMessage = 'Network connection error. Please check your connection and try again.';
+                    }
+                }
+            }
+            
+            this.showMessage(errorMessage, 'error', true);
         },
 
         /**
