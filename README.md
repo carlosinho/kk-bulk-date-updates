@@ -1,6 +1,6 @@
-# Bulk Date Updates by KK (WordPress Plugin)
+# Bulk Date Updates by KK
 
-A comprehensive WordPress plugin for bulk updating dates across posts and content with advanced filtering and safety features.
+A comprehensive **WordPress plugin** for bulk updating dates across posts and content with advanced filtering and safety features.
 
 ## Features
 
