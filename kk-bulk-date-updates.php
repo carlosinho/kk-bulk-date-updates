@@ -1,11 +1,10 @@
 <?php
 /**
  * Plugin Name: Bulk Date Updates by KK
- * Plugin URI: https://karol.cc/
  * Description: A WordPress plugin for bulk updating dates across posts and pages.
- * Version: 0.1.0
+ * Version: 0.10
  * Author: Karol K
- * Author URI: https://karol.cc/
+ * Author URI: https://wpwork.shop/
  * License: GPL v2 or later
  * Text Domain: kk-bulk-date-updates
  * Domain Path: /languages

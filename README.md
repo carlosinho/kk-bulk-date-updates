@@ -1,246 +1,196 @@
 # Bulk Date Updates by KK
 
-A comprehensive **WordPress plugin** for bulk updating dates across posts and content with advanced filtering and safety features.
+`Bulk Date Updates by KK` is a WordPress admin plugin for changing publish and modified dates across many posts in one operation.
 
-## Features
+It exists to handle date corrections and timeline shifts without editing posts one by one. The implemented workflow is deliberately admin-only, limited to published content, and biased toward previewing before writing.
 
-- **Backend-Only Plugin**: Focused exclusively on admin functionality for bulk date updates
-- **Multiple Update Methods**: 
-  - ✅ Add/subtract days from existing dates
-  - ✅ Match modified dates to published dates with offset
-  - 🚧 Set specific dates (TBA)
-  - 🚧 Assign random dates within a range (TBA)
-- **Post Type Support**: Works with all public post types (posts, pages, custom post types)
-- **Content Filtering**: Advanced filtering options to target specific content
-  - ✅ Published date range filtering
-  - ✅ Latest/oldest post selection
-  - ✅ Category and tag filtering
-- **Published Content Only**: Optimized to work exclusively with published content for safety
-- **Date Field Options**: Update published dates, modified dates, or both
-- **Safety Features**: Test mode (dry run), post limits, and comprehensive validation
-- **AJAX Interface**: Modern, responsive admin interface with progress indicators
-- **Activity Logging**: Track recent bulk update operations with detailed information
-- **Security**: Proper nonce verification, capability checks, and data sanitization
-- **Performance Optimized**: Batch processing, memory management, and efficient database operations
-- **Internationalization**: Ready for translation with proper text domains
+## What It Does Now
 
-## File Structure
+The plugin adds a screen at `Tools -> Bulk Date Updates` and lets an administrator:
 
-```
+- select one or more public post types from the admin UI, excluding attachments
+- target only published posts
+- optionally narrow the selection by:
+  - published date range
+  - latest or oldest N posts
+  - categories and/or tags
+- choose which fields to affect:
+  - `post_date`
+  - `post_modified`
+- run one of the implemented date update methods:
+  - `add_days`
+  - `subtract_days`
+  - `match_modified_to_published`
+- preview the first 10 affected rows in test mode before writing changes
+- execute the update through WordPress AJAX from the admin screen
+- see a temporary "Recent Activity" table for the current page session
+
+## Why It Exists
+
+This codebase solves a narrow operational problem: bulk date maintenance for WordPress content while staying inside wp-admin.
+
+The implementation is optimized for large date-only updates. Instead of calling `wp_update_post()` per post, it batches work and writes date columns directly to `wp_posts` for speed.
+
+## Main User Flows
+
+### Preview changes
+
+1. Open `wp-admin/tools.php?page=kk-bulk-date-updates`.
+2. Choose post types, filters, date fields, and an update method.
+3. Leave `Test Mode` enabled.
+4. Submit the form.
+5. Review the preview table. Only the first 10 matching posts are shown, even when more will be affected.
+
+### Apply changes
+
+1. Start from the same form.
+2. Uncheck `Test Mode`.
+3. Submit the form.
+4. The plugin updates matching rows in `wp_posts`.
+5. The page shows a success or failure message and fills the temporary activity table.
+
+### Match modified date to published date
+
+This method is special:
+
+- the UI locks the date-field checkboxes
+- the backend updates `post_modified` from `post_date`
+- `modified_date_offset` is applied in minutes
+- published date is shown in preview for context, but it is not rewritten by this method unless another method changes it
+
+## Current Scope and Non-Features
+
+Implemented now:
+
+- admin page under `Tools`
+- AJAX-based execution through `admin-ajax.php`
+- publish-date and modified-date updates
+- dry-run preview
+- batch processing and direct SQL writes
+
+Present in the UI but not implemented in backend logic:
+
+- `specific_date`
+- `random_range`
+
+Not present in this repository:
+
+- REST API
+- WP-CLI command
+- scheduled/background worker
+- persistent audit log table
+- custom settings screen
+- plugin-specific environment variables
+- build step with Composer, npm, or bundling
+
+## Tech Stack
+
+- PHP WordPress plugin
+- WordPress admin APIs
+- `WP_Query` for candidate selection
+- `$wpdb` for direct updates to `wp_posts`
+- jQuery-based admin JavaScript
+- plain CSS for the admin page
+
+The repository does not declare a plugin-specific PHP or WordPress minimum version in code.
+
+## Setup
+
+## Install
+
+1. Put the plugin directory in `wp-content/plugins/kk-bulk-date-updates`.
+2. Activate `Bulk Date Updates by KK` in WordPress.
+3. Open `Tools -> Bulk Date Updates`.
+
+Activation currently adds one option:
+
+- `kk_bulk_date_updates_version`
+
+No database table is created by the active code path.
+
+## Relevant Admin Routes and Endpoints
+
+Admin screen:
+
+- `wp-admin/tools.php?page=kk-bulk-date-updates`
+
+AJAX endpoint:
+
+- `POST wp-admin/admin-ajax.php`
+- `action=kk_bulk_date_updates_action`
+
+Request requirements enforced by the plugin:
+
+- authenticated WordPress admin session
+- capability `manage_options`
+- nonce for `kk_bulk_date_updates_nonce`
+
+## Project Structure
+
+```text
 kk-bulk-date-updates/
-├── kk-bulk-date-updates.php    # Main plugin file
-├── css/                        # Stylesheets
-│   └── admin.css              # Admin interface styles
-├── js/                         # JavaScript files
-│   └── admin.js               # Admin functionality
-├── includes/                   # PHP includes
+├── kk-bulk-date-updates.php
+├── includes/
 │   └── admin/
-│       └── admin-page.php     # Admin page template
-├── languages/                  # Translation files (to be created)
-└── README.md                  # This file
+│       └── admin-page.php
+├── js/
+│   └── admin.js
+├── css/
+│   └── admin.css
+└── languages/
+    └── .gitkeep
 ```
 
-## Installation
+What each file does:
 
-1. Upload the plugin folder to `/wp-content/plugins/`
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Navigate to **Tools > Bulk Date Updates** to access the plugin
+- `kk-bulk-date-updates.php`: plugin bootstrap, admin hooks, AJAX handler, validation, query building, preview generation, batched writes, activation/deactivation
+- `includes/admin/admin-page.php`: form markup and inline UI behavior for conditional fields
+- `js/admin.js`: AJAX form submission, status messages, preview rendering, activity table rendering
+- `css/admin.css`: admin layout and presentation
+- `languages/.gitkeep`: placeholder only; no translation files are shipped here yet
 
-## Usage
+## Operational Rules That Matter
 
-### Admin Interface
+- only published posts are targeted
+- maximum `limit_posts` accepted by the backend is `10000`
+- `count_limit` filter accepts `1..1000`
+- preview mode shows at most 10 rows, even when more posts match
+- category/tag filtering is only useful for post types that actually use those taxonomies
+- the modified-date offset is sanitized as a non-negative integer in the current implementation
 
-The plugin adds a new page under **Tools > Bulk Date Updates** with the following options:
+## Troubleshooting
 
-#### Post Selection
-- **Post Types**: Select which post types to update (posts, pages, custom post types)
-- **Content Filters**: Advanced filtering options to target specific content:
-  - **No Filter**: Update all published content (default)
-  - **Published Date Range**: Filter by publication date range
-  - **Latest/Oldest Posts**: Limit to a specific number of newest or oldest posts
-  - **Category/Tag Filter**: Filter by categories or tags (for posts)
-- **Limit Posts**: Set maximum number of posts to update (safety feature, applied after filters)
+### "No posts found matching the specified criteria"
 
-*Note: This plugin only works with published content. Draft, private, and pending posts are not affected.*
+Usually means one of these:
 
-#### Date Update Options
-- **Date Fields**: Choose between published date, modified date, or both
-- **Modified Date Offset**: When updating modified dates, add a specified number of minutes offset
-- **Update Method**: 
-  - ✅ **Add Days**: Add a specified number of days to existing dates
-  - ✅ **Subtract Days**: Subtract a specified number of days from existing dates
-  - ✅ **Match Modified to Published**: Set modified dates to match published dates (with optional offset)
-  - 🚧 **Set Specific Date**: Assign the same date/time to all selected posts (TBA)
-  - 🚧 **Random Date Range**: Assign random dates within a specified range (TBA)
+- your post-type selection has no published posts
+- the date range excludes everything
+- the latest/oldest filter is narrower than expected
+- you chose category/tag filtering for content that does not use those taxonomies
 
-#### Safety Features
-- **Test Mode**: Preview changes without actually updating (recommended)
-- **Progress Indicator**: Visual feedback during bulk operations
-- **Activity Log**: Track recent bulk update operations with detailed information
+### Large runs fail with a memory message
 
-### JavaScript Functionality
+For non-dry-run operations over 1000 posts, the plugin rejects the request unless PHP `memory_limit` is at least `512M`.
 
-#### Admin Features
-- Dynamic form field visibility based on update method
-- AJAX form submission with progress tracking
-- Real-time validation and user feedback
-- Loading indicators and error handling
-- Form reset functionality
+### Preview works but update changes nothing
 
-## WordPress Coding Standards
+If you chose `Set Specific Date (TBA)` or `Random Date Range (TBA)`, that is expected in the current codebase. Those methods are exposed in the form but are not implemented in the write logic.
 
-This plugin follows WordPress coding standards and best practices:
+### The Recent Activity table is empty after reload
 
-- **Security**: Proper nonce verification, capability checks, and data sanitization
-- **Database**: Uses WordPress database abstraction layer (`$wpdb`) with prepared statements
-- **Hooks**: Utilizes WordPress action and filter hooks for extensibility
-- **Internationalization**: All strings are translatable using `__()` and `_e()` functions
-- **Asset Management**: Proper enqueueing of scripts and styles
-- **Error Handling**: Comprehensive error handling and logging
-- **Performance**: Optimized database queries, batch processing, and memory management
+That table is not persisted. It is populated from the AJAX response of the current operation only.
 
-## Development
+### Categories or tags do not appear relevant for my selection
 
-### Key Classes and Functions
+The UI only has built-in taxonomy selectors for standard post categories and tags. Pages show a message that they do not use those taxonomies by default.
 
-#### Main Plugin Class: `KK_Bulk_Date_Updates`
-- Singleton pattern implementation
-- Handles plugin lifecycle (activation, deactivation, uninstall)
-- Manages admin interface and AJAX handlers
-- Enqueues scripts and styles
+### I expected drafts or private posts to be updated
 
-#### Admin Interface
-- Located in `includes/admin/admin-page.php`
-- Provides comprehensive form for bulk date updates with content filtering
-- Includes JavaScript for dynamic form behavior and filter management
+This plugin does not target them. The backend hardcodes post status to `publish`.
 
-#### Content Filtering System
-The plugin implements a sophisticated filtering system to target specific content:
+## Notes for Operators
 
-- **Filter Types**: Date range, count limit, and taxonomy filtering
-- **Smart UI**: Dynamic show/hide of filter options based on selection
-- **Taxonomy Detection**: Automatically shows/hides categories/tags based on selected post types
-- **Query Integration**: Filters are applied at the database level using `WP_Query` arguments
-- **Performance**: Efficient filtering with minimal database overhead
-
-#### Core Functions
-- `get_posts_to_update()`: Central function that applies all filters and returns target post IDs
-- `sanitize_form_data()`: Handles sanitization of all form inputs including filter data
-- `validate_form_data()`: Validates filter-specific requirements and constraints
-
-#### Admin CSS Classes
-- `kk-bulk-date-updates-admin`: Main admin container
-- `kk-bulk-date-updates-form`: Form styling
-- `kk-bulk-date-updates-button`: Button styling
-- `kk-bulk-date-updates-message`: Message notifications
-- `kk-bulk-date-updates-progress`: Progress indicators
-
-### Extending the Plugin
-
-The plugin is designed to be extensible through WordPress hooks. Here are some examples:
-
-```php
-// Filter the WP_Query arguments before getting posts to update
-add_filter('kk_bulk_date_updates_query_args', function($args, $form_data) {
-    // Add custom meta query
-    $args['meta_query'] = array(
-        array(
-            'key' => 'featured_post',
-            'value' => '1',
-            'compare' => '='
-        )
-    );
-    return $args;
-}, 10, 2);
-
-// Modify available content filter options
-add_filter('kk_bulk_date_updates_content_filters', function($filters) {
-    $filters['custom_filter'] = 'Custom Filter Type';
-    return $filters;
-});
-
-// Add custom validation for content filters
-add_filter('kk_bulk_date_updates_validate_filters', function($is_valid, $filter_type, $form_data) {
-    if ($filter_type === 'custom_filter') {
-        // Add custom validation logic
-        return !empty($form_data['custom_field']);
-    }
-    return $is_valid;
-}, 10, 3);
-```
-
-## Security Considerations
-
-- All AJAX requests are protected with nonces
-- User capability checks (`manage_options`) are enforced
-- Input data is properly sanitized and validated
-- SQL queries use prepared statements
-- Direct file access is prevented
-
-## Performance
-
-- Efficient database queries with proper indexing
-- Batch processing for large datasets (handles 1000+ posts)
-- Progress tracking for long-running operations
-- Optimized asset loading (only on relevant admin pages)
-- Memory management for large operations (requires 512MB+ for 1000+ posts)
-
-## Browser Support
-
-- Modern browsers (Chrome, Firefox, Safari, Edge)
-- Responsive design for mobile devices
-- Graceful degradation for older browsers
-
-## Contributing
-
-1. Follow WordPress coding standards
-2. Include proper documentation
-3. Add security checks for all user inputs
-4. Test thoroughly before submitting
-
-## License
-
-GPL v2 or later
-
-## Changelog
-
-### Version 0.1.0 (Current)
-- ✅ **Content Filtering System**: Advanced filtering options for targeted updates
-  - Published date range filtering
-  - Latest/oldest post selection with configurable count
-  - Category and tag filtering with smart taxonomy detection
-- ✅ **Published Content Only**: Streamlined to work exclusively with published content for safety
-- ✅ Add Days functionality
-- ✅ Subtract Days functionality  
-- ✅ Match Modified to Published functionality
-- ✅ Test mode (dry run) with detailed preview
-- ✅ Activity logging system
-- ✅ Performance optimizations for large datasets
-- ✅ Enhanced security and validation
-- ✅ AJAX interface with progress tracking and improved error handling
-- 🚧 Set Specific Date method (TBA)
-- 🚧 Random Date Range method (TBA)
-
-### Version 0.0.3
-- ✅ Removed post status selection (hardcoded to published content only)
-- ✅ Enhanced user interface with clearer messaging
-- ✅ Improved safety and user experience
-
-### Version 0.0.2
-- ✅ Initial implementation of core functionality
-- ✅ Basic update methods and AJAX interface
-- ✅ Safety features and validation
-
-### Version 1.0.0 (Planned)
-- 🚧 Set Specific Date functionality
-- 🚧 Random Date Range functionality
-- 🚧 Additional update methods
-- 🚧 Enhanced internationalization
-
-## Support
-
-For support and feature requests, please contact the plugin author or submit issues through the appropriate channels.
-
-## Legend
-- ✅ Implemented and working
-- 🚧 To Be Announced (TBA) - Not yet implemented 
+- Start with `Test Mode` enabled. The plugin defaults to preview for a reason.
+- For larger runs, execute during a low-traffic window because the plugin flushes object cache after completion.
+- If your site depends on other code reacting to normal post-save hooks, review `ARCHITECTURE.md` before using this on very large production sites.
