@@ -2,35 +2,36 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Bulk Date Updates by KK 0.20\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/kk-bulk-date-updates\n"
+"Project-Id-Version: Chronocrow Bulk Date Updates 0.30\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/chronocrow-bulk-date-updates\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-20T13:34:46+00:00\n"
+"POT-Creation-Date: 2026-07-20T19:13:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
-"X-Domain: kk-bulk-date-updates\n"
+"X-Domain: chronocrow-bulk-date-updates\n"
 
 #. Plugin Name of the plugin
-#: kk-bulk-date-updates.php
-msgid "Bulk Date Updates by KK"
+#: chronocrow-bulk-date-updates.php
+#: includes/class-bduk-plugin.php:97
+msgid "Chronocrow Bulk Date Updates"
 msgstr ""
 
 #. Description of the plugin
-#: kk-bulk-date-updates.php
+#: chronocrow-bulk-date-updates.php
 msgid "A WordPress plugin for bulk updating dates across posts and pages."
 msgstr ""
 
 #. Author of the plugin
-#: kk-bulk-date-updates.php
+#: chronocrow-bulk-date-updates.php
 msgid "Karol K"
 msgstr ""
 
 #. Author URI of the plugin
-#: kk-bulk-date-updates.php
+#: chronocrow-bulk-date-updates.php
 msgid "https://wpwork.shop/"
 msgstr ""
 
@@ -123,12 +124,12 @@ msgid "Date Fields"
 msgstr ""
 
 #: includes/admin/admin-page.php:134
-#: includes/class-bduk-plugin.php:825
+#: includes/class-bduk-plugin.php:824
 msgid "Published Date"
 msgstr ""
 
 #: includes/admin/admin-page.php:139
-#: includes/class-bduk-plugin.php:826
+#: includes/class-bduk-plugin.php:825
 msgid "Modified Date"
 msgstr ""
 
@@ -153,27 +154,27 @@ msgid "Update Method"
 msgstr ""
 
 #: includes/admin/admin-page.php:159
-#: includes/class-bduk-plugin.php:828
+#: includes/class-bduk-plugin.php:827
 msgid "Add Days"
 msgstr ""
 
 #: includes/admin/admin-page.php:160
-#: includes/class-bduk-plugin.php:829
+#: includes/class-bduk-plugin.php:828
 msgid "Subtract Days"
 msgstr ""
 
 #: includes/admin/admin-page.php:161
-#: includes/class-bduk-plugin.php:830
+#: includes/class-bduk-plugin.php:829
 msgid "Match Modified to Published"
 msgstr ""
 
 #: includes/admin/admin-page.php:162
-#: includes/class-bduk-plugin.php:831
+#: includes/class-bduk-plugin.php:830
 msgid "Set Specific Date (TBA)"
 msgstr ""
 
 #: includes/admin/admin-page.php:163
-#: includes/class-bduk-plugin.php:832
+#: includes/class-bduk-plugin.php:831
 msgid "Random Date Range (TBA)"
 msgstr ""
 
@@ -243,7 +244,7 @@ msgid "Recent Activity"
 msgstr ""
 
 #: includes/admin/admin-page.php:248
-#: includes/class-bduk-plugin.php:533
+#: includes/class-bduk-plugin.php:532
 msgid "Post"
 msgstr ""
 
@@ -264,165 +265,164 @@ msgid "Update Dates"
 msgstr ""
 
 #: includes/class-bduk-plugin.php:98
-#: includes/class-bduk-plugin.php:99
 msgid "Bulk Date Updates"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:121
+#: includes/class-bduk-plugin.php:120
 msgid "Security check failed"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:126
+#: includes/class-bduk-plugin.php:125
 msgid "Insufficient permissions"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:156
+#: includes/class-bduk-plugin.php:155
 msgid "Invalid form data provided"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:175
+#: includes/class-bduk-plugin.php:174
 msgid "No posts found matching the specified criteria"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:188
+#: includes/class-bduk-plugin.php:187
 #, php-format
 msgid "Large bulk operation detected (%d posts). Please increase PHP memory_limit to at least 512M or reduce the number of posts. Current limit: %s"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:291
+#: includes/class-bduk-plugin.php:290
 msgid "Please select at least one date field to update"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:302
+#: includes/class-bduk-plugin.php:301
 msgid "Please enter a valid number of days (minimum 1)"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:316
+#: includes/class-bduk-plugin.php:315
 msgid "Please provide both start and end dates for date range filter"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:323
+#: includes/class-bduk-plugin.php:322
 msgid "Start date must be before end date"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:332
+#: includes/class-bduk-plugin.php:331
 msgid "Please enter a valid number between 1 and 1000 for count limit filter"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:341
+#: includes/class-bduk-plugin.php:340
 msgid "Please select at least one category or tag for category/tag filter"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:437
+#: includes/class-bduk-plugin.php:436
 #, php-format
 msgid "No changes needed for the %d matching posts. Their dates already match the selected update method."
 msgstr ""
 
-#: includes/class-bduk-plugin.php:442
+#: includes/class-bduk-plugin.php:441
 #, php-format
 msgid "Preview generated for %1$d posts (%2$d will be updated)"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:521
+#: includes/class-bduk-plugin.php:520
 msgid "No changes to preview. The matching posts already have the target dates for this update method."
 msgstr ""
 
-#: includes/class-bduk-plugin.php:525
+#: includes/class-bduk-plugin.php:524
 #, php-format
 msgid "Preview: %d posts will be updated"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:528
+#: includes/class-bduk-plugin.php:527
 #, php-format
 msgid "Showing the first %1$d posts that need changes out of %2$d total updates."
 msgstr ""
 
-#: includes/class-bduk-plugin.php:534
+#: includes/class-bduk-plugin.php:533
 msgid "Current Dates"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:535
+#: includes/class-bduk-plugin.php:534
 msgid "New Dates"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:540
-#: includes/class-bduk-plugin.php:822
+#: includes/class-bduk-plugin.php:539
+#: includes/class-bduk-plugin.php:821
 msgid "ID:"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:545
-#: includes/class-bduk-plugin.php:553
+#: includes/class-bduk-plugin.php:544
+#: includes/class-bduk-plugin.php:552
 msgid "Published"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:545
-#: includes/class-bduk-plugin.php:553
+#: includes/class-bduk-plugin.php:544
+#: includes/class-bduk-plugin.php:552
 msgid "Modified"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:596
+#: includes/class-bduk-plugin.php:595
 #, php-format
 msgid "Post ID %d not found"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:612
+#: includes/class-bduk-plugin.php:611
 #, php-format
 msgid "Failed to update post ID %d"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:639
+#: includes/class-bduk-plugin.php:638
 #, php-format
 msgid "Processed %d posts in %d batches with optimized database operations."
 msgstr ""
 
-#: includes/class-bduk-plugin.php:647
+#: includes/class-bduk-plugin.php:646
 #, php-format
 msgid "Successfully updated %d post."
 msgid_plural "Successfully updated %d posts."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-bduk-plugin.php:657
+#: includes/class-bduk-plugin.php:656
 #, php-format
 msgid "However, %d errors occurred."
 msgstr ""
 
-#: includes/class-bduk-plugin.php:673
+#: includes/class-bduk-plugin.php:672
 msgid "No posts needed updating. The matching posts already have the target dates for this update method."
 msgstr ""
 
-#: includes/class-bduk-plugin.php:815
+#: includes/class-bduk-plugin.php:814
 msgid "Processing..."
 msgstr ""
 
-#: includes/class-bduk-plugin.php:816
+#: includes/class-bduk-plugin.php:815
 msgid "An error occurred"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:817
+#: includes/class-bduk-plugin.php:816
 msgid "Operation completed successfully"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:818
+#: includes/class-bduk-plugin.php:817
 msgid "Are you sure you want to reset all fields?"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:819
+#: includes/class-bduk-plugin.php:818
 msgid "Permission denied. Please refresh the page and try again."
 msgstr ""
 
-#: includes/class-bduk-plugin.php:820
+#: includes/class-bduk-plugin.php:819
 msgid "Server error occurred. Please try again."
 msgstr ""
 
-#: includes/class-bduk-plugin.php:821
+#: includes/class-bduk-plugin.php:820
 msgid "Network connection error. Please check your connection and try again."
 msgstr ""
 
-#: includes/class-bduk-plugin.php:823
+#: includes/class-bduk-plugin.php:822
 msgid "Published:"
 msgstr ""
 
-#: includes/class-bduk-plugin.php:824
+#: includes/class-bduk-plugin.php:823
 msgid "Modified:"
 msgstr ""

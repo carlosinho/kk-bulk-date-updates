@@ -1,6 +1,6 @@
-# Bulk Date Updates by KK
+# Chronocrow Bulk Date Updates
 
-`Bulk Date Updates by KK` is a WordPress admin plugin for changing publish and modified dates across many posts in one operation.
+`Chronocrow Bulk Date Updates` is a WordPress admin plugin for changing publish and modified dates across many posts in one operation.
 
 It exists to handle date corrections and timeline shifts without editing posts one by one. The implemented workflow is deliberately admin-only, limited to published content, and biased toward previewing before writing.
 
@@ -35,7 +35,7 @@ The implementation is optimized for large date-only updates. Instead of calling 
 
 ### Preview changes
 
-1. Open `wp-admin/tools.php?page=kk-bulk-date-updates`.
+1. Open `wp-admin/tools.php?page=chronocrow-bulk-date-updates`.
 2. Choose post types, filters, date fields, and an update method.
 3. Leave `Test Mode` enabled.
 4. Submit the form.
@@ -98,8 +98,8 @@ The repository does not declare a plugin-specific PHP or WordPress minimum versi
 
 ## Install
 
-1. Put the plugin directory in `wp-content/plugins/kk-bulk-date-updates`.
-2. Activate `Bulk Date Updates by KK` in WordPress.
+1. Put the plugin directory in `wp-content/plugins/chronocrow-bulk-date-updates`.
+2. Activate `Chronocrow Bulk Date Updates` in WordPress.
 3. Open `Tools -> Bulk Date Updates`.
 
 Activation currently adds one option:
@@ -112,7 +112,7 @@ No database table is created by the active code path.
 
 Admin screen:
 
-- `wp-admin/tools.php?page=kk-bulk-date-updates`
+- `wp-admin/tools.php?page=chronocrow-bulk-date-updates`
 
 AJAX endpoint:
 
@@ -128,8 +128,8 @@ Request requirements enforced by the plugin:
 ## Project Structure
 
 ```text
-kk-bulk-date-updates/
-├── kk-bulk-date-updates.php
+chronocrow-bulk-date-updates/
+├── chronocrow-bulk-date-updates.php
 ├── uninstall.php
 ├── includes/
 │   ├── class-bduk-plugin.php
@@ -141,19 +141,19 @@ kk-bulk-date-updates/
 ├── css/
 │   └── admin.css
 └── languages/
-    └── kk-bulk-date-updates.pot
+    └── chronocrow-bulk-date-updates.pot
 ```
 
 What each file does:
 
-- `kk-bulk-date-updates.php`: plugin bootstrap, constants, dependency loading, and startup
+- `chronocrow-bulk-date-updates.php`: plugin bootstrap, constants, dependency loading, and startup
 - `uninstall.php`: guarded uninstall cleanup for plugin-owned options
 - `includes/class-bduk-plugin.php`: main orchestration class for admin hooks, AJAX handling, validation, preview generation, batched writes, and lifecycle helpers
 - `includes/class-bduk-date-resolver.php`: shared date calculation for preview and live updates
 - `includes/admin/admin-page.php`: form markup and inline UI behavior for conditional fields
 - `js/admin.js`: AJAX form submission, status messages, preview rendering, activity table rendering
 - `css/admin.css`: admin layout and presentation
-- `languages/kk-bulk-date-updates.pot`: generated translation template for WordPress.org packaging
+- `languages/chronocrow-bulk-date-updates.pot`: generated translation template for WordPress.org packaging
 
 ## Operational Rules That Matter
 

@@ -10,7 +10,7 @@ The plugin is a small admin-only WordPress plugin with one main orchestration cl
 
 Runtime entry points:
 
-- plugin bootstrap file: `kk-bulk-date-updates.php`
+- plugin bootstrap file: `chronocrow-bulk-date-updates.php`
 - main orchestration class: `includes/class-bduk-plugin.php`
 - date resolver: `includes/class-bduk-date-resolver.php`
 - admin page view: `includes/admin/admin-page.php`
@@ -38,7 +38,7 @@ That philosophy explains most of the architecture:
 
 Initialization flow:
 
-1. WordPress loads `kk-bulk-date-updates.php`.
+1. WordPress loads `chronocrow-bulk-date-updates.php`.
 2. The bootstrap defines constants and requires `includes/class-bduk-date-resolver.php` and `includes/class-bduk-plugin.php`.
 3. `plugins_loaded` calls `bduk_init()`.
 4. `BDUK_Plugin::get_instance()` constructs the singleton.
@@ -123,7 +123,7 @@ Important implementation caveats:
 
 ### Admin page flow
 
-1. Admin opens `wp-admin/tools.php?page=kk-bulk-date-updates`.
+1. Admin opens `wp-admin/tools.php?page=chronocrow-bulk-date-updates`.
 2. `add_management_page()` renders the form from `includes/admin/admin-page.php`.
 3. `admin_enqueue_scripts()` loads `css/admin.css` and `js/admin.js` only on this screen.
 4. `wp_localize_script()` provides:

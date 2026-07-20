@@ -2,7 +2,7 @@
 
 ## Status
 
-`v0.20` is the current implemented version.
+`v0.30` is the current implemented version.
 
 The plugin is usable as an admin-only bulk date maintenance tool for published WordPress content. Core flows are in place: selecting posts, previewing changes, and applying bulk updates through AJAX. The major unfinished work already visible in the codebase is that `specific_date` and `random_range` are exposed in the UI but still not implemented in backend date calculation and write paths.
 
@@ -10,7 +10,7 @@ The plugin is usable as an admin-only bulk date maintenance tool for published W
 
 ### v0.02 - Initial working plugin
 
-- [x] WordPress plugin bootstrap in `kk-bulk-date-updates.php`
+- [x] WordPress plugin bootstrap in `chronocrow-bulk-date-updates.php`
 - [x] Admin screen added under `Tools -> Bulk Date Updates`
 - [x] AJAX submission flow through `wp-admin/admin-ajax.php` with `action=bduk_bulk_date_updates_action`
 - [x] Nonce verification and `manage_options` capability checks
@@ -64,7 +64,7 @@ The plugin is usable as an admin-only bulk date maintenance tool for published W
   - Should we refactor and improve after the originally written code, which is from last year? Can any of the plugin functionality be implemented in a more efficient way? I'm not looking for changes for the sake of them or fixing security issues that are purely hypothetical and will never happen. I'm looking for actual sub-par execution/implementation.
   - Done:
     - [x] Extract shared date resolution into `includes/class-bduk-date-resolver.php`
-    - [x] Move `BDUK_Plugin` into `includes/class-bduk-plugin.php` and slim `kk-bulk-date-updates.php` down to bootstrap duties
+    - [x] Move `BDUK_Plugin` into `includes/class-bduk-plugin.php` and slim `chronocrow-bulk-date-updates.php` down to bootstrap duties
     - [x] DRY preview and live update paths through the resolver
     - [x] Batch-fetch preview posts instead of per-post `get_post()` calls
     - [x] Normalize AJAX responses with `wp_send_json_success()` / `wp_send_json_error()`
@@ -72,6 +72,10 @@ The plugin is usable as an admin-only bulk date maintenance tool for published W
     - [x] Remove dead code (`create_log_entry()`, unused hook state storage, unused JS helpers)
 
 ### v0.30 — WordPress.org release
+- [x] Branding change to: Chronocrow Bulk Date Updates
+  - Change the slug (chronocrow-bulk-date-updates), text domain and anything else that needs changing accordingly.
+  - The current class names and prefixes ("bduk") don't need to change.
+  - The tips from PLUGIN_REVIEW_TIPS.md should be taken into account when doing this move.
 - [ ] Prep plugin for WordPress.org submission.
 - [ ] Deploy to WordPress.org SVN.
 

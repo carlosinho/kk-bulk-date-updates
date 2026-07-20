@@ -67,7 +67,7 @@ class BDUK_Plugin {
     public function init() {
         // Load text domain for internationalization
         load_plugin_textdomain(
-            'kk-bulk-date-updates',
+            'chronocrow-bulk-date-updates',
             false,
             dirname(BDUK_PLUGIN_BASENAME) . '/languages'
         );
@@ -94,10 +94,10 @@ class BDUK_Plugin {
      */
     public function add_admin_menu() {
         add_management_page(
-            __('Bulk Date Updates', 'kk-bulk-date-updates'),
-            __('Bulk Date Updates', 'kk-bulk-date-updates'),
+            __('Chronocrow Bulk Date Updates', 'chronocrow-bulk-date-updates'),
+            __('Bulk Date Updates', 'chronocrow-bulk-date-updates'),
             'manage_options',
-            'kk-bulk-date-updates',
+            'chronocrow-bulk-date-updates',
             array($this, 'admin_page_callback')
         );
     }
@@ -117,12 +117,12 @@ class BDUK_Plugin {
         $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
 
         if (!wp_verify_nonce($nonce, 'bduk_bulk_date_updates_nonce')) {
-            wp_die(__('Security check failed', 'kk-bulk-date-updates'));
+            wp_die(__('Security check failed', 'chronocrow-bulk-date-updates'));
         }
         
         // Check user capabilities
         if (!current_user_can('manage_options')) {
-            wp_die(__('Insufficient permissions', 'kk-bulk-date-updates'));
+            wp_die(__('Insufficient permissions', 'chronocrow-bulk-date-updates'));
         }
         
         // Process the bulk date update request
@@ -152,7 +152,7 @@ class BDUK_Plugin {
         if (!$form_data) {
             return array(
                 'success' => false,
-                'message' => __('Invalid form data provided', 'kk-bulk-date-updates')
+                'message' => __('Invalid form data provided', 'chronocrow-bulk-date-updates')
             );
         }
         
@@ -171,7 +171,7 @@ class BDUK_Plugin {
         if (empty($posts)) {
             return array(
                 'success' => false,
-                'message' => __('No posts found matching the specified criteria', 'kk-bulk-date-updates')
+                'message' => __('No posts found matching the specified criteria', 'chronocrow-bulk-date-updates')
             );
         }
         
@@ -184,7 +184,7 @@ class BDUK_Plugin {
                 return array(
                     'success' => false,
                     'message' => sprintf(
-                        __('Large bulk operation detected (%d posts). Please increase PHP memory_limit to at least 512M or reduce the number of posts. Current limit: %s', 'kk-bulk-date-updates'),
+                        __('Large bulk operation detected (%d posts). Please increase PHP memory_limit to at least 512M or reduce the number of posts. Current limit: %s', 'chronocrow-bulk-date-updates'),
                         count($posts),
                         $memory_limit
                     )
@@ -287,7 +287,7 @@ class BDUK_Plugin {
         if (empty($form_data['date_fields'])) {
             return array(
                 'valid' => false,
-                'message' => __('Please select at least one date field to update', 'kk-bulk-date-updates')
+                'message' => __('Please select at least one date field to update', 'chronocrow-bulk-date-updates')
             );
         }
         
@@ -298,7 +298,7 @@ class BDUK_Plugin {
                 if ($form_data['days_value'] < 1) {
                     return array(
                         'valid' => false,
-                        'message' => __('Please enter a valid number of days (minimum 1)', 'kk-bulk-date-updates')
+                        'message' => __('Please enter a valid number of days (minimum 1)', 'chronocrow-bulk-date-updates')
                     );
                 }
                 break;
@@ -312,14 +312,14 @@ class BDUK_Plugin {
                 if (empty($form_data['filter_date_start']) || empty($form_data['filter_date_end'])) {
                     return array(
                         'valid' => false,
-                        'message' => __('Please provide both start and end dates for date range filter', 'kk-bulk-date-updates')
+                        'message' => __('Please provide both start and end dates for date range filter', 'chronocrow-bulk-date-updates')
                     );
                 }
                 
                 if (strtotime($form_data['filter_date_start']) > strtotime($form_data['filter_date_end'])) {
                     return array(
                         'valid' => false,
-                        'message' => __('Start date must be before end date', 'kk-bulk-date-updates')
+                        'message' => __('Start date must be before end date', 'chronocrow-bulk-date-updates')
                     );
                 }
                 break;
@@ -328,7 +328,7 @@ class BDUK_Plugin {
                 if ($form_data['filter_count'] < 1 || $form_data['filter_count'] > 1000) {
                     return array(
                         'valid' => false,
-                        'message' => __('Please enter a valid number between 1 and 1000 for count limit filter', 'kk-bulk-date-updates')
+                        'message' => __('Please enter a valid number between 1 and 1000 for count limit filter', 'chronocrow-bulk-date-updates')
                     );
                 }
                 break;
@@ -337,7 +337,7 @@ class BDUK_Plugin {
                 if (empty($form_data['filter_categories']) && empty($form_data['filter_tags'])) {
                     return array(
                         'valid' => false,
-                        'message' => __('Please select at least one category or tag for category/tag filter', 'kk-bulk-date-updates')
+                        'message' => __('Please select at least one category or tag for category/tag filter', 'chronocrow-bulk-date-updates')
                     );
                 }
                 break;
@@ -433,12 +433,12 @@ class BDUK_Plugin {
 
         if (0 === $posts_needing_update) {
             $message = sprintf(
-                __('No changes needed for the %d matching posts. Their dates already match the selected update method.', 'kk-bulk-date-updates'),
+                __('No changes needed for the %d matching posts. Their dates already match the selected update method.', 'chronocrow-bulk-date-updates'),
                 $total_posts
             );
         } else {
             $message = sprintf(
-                __('Preview generated for %1$d posts (%2$d will be updated)', 'kk-bulk-date-updates'),
+                __('Preview generated for %1$d posts (%2$d will be updated)', 'chronocrow-bulk-date-updates'),
                 $total_posts,
                 $posts_needing_update
             );
@@ -517,31 +517,31 @@ class BDUK_Plugin {
      */
     private function generate_preview_html($preview_data, $total_posts, $posts_needing_update, $form_data) {
         if (empty($preview_data)) {
-            return '<p>' . __('No changes to preview. The matching posts already have the target dates for this update method.', 'kk-bulk-date-updates') . '</p>';
+            return '<p>' . __('No changes to preview. The matching posts already have the target dates for this update method.', 'chronocrow-bulk-date-updates') . '</p>';
         }
         
         $html = '<div class="bduk-preview-results">';
-        $html .= '<h3>' . sprintf(__('Preview: %d posts will be updated', 'kk-bulk-date-updates'), $posts_needing_update) . '</h3>';
+        $html .= '<h3>' . sprintf(__('Preview: %d posts will be updated', 'chronocrow-bulk-date-updates'), $posts_needing_update) . '</h3>';
         
         if (count($preview_data) < $posts_needing_update) {
-            $html .= '<p><em>' . sprintf(__('Showing the first %1$d posts that need changes out of %2$d total updates.', 'kk-bulk-date-updates'), count($preview_data), $posts_needing_update) . '</em></p>';
+            $html .= '<p><em>' . sprintf(__('Showing the first %1$d posts that need changes out of %2$d total updates.', 'chronocrow-bulk-date-updates'), count($preview_data), $posts_needing_update) . '</em></p>';
         }
         
         $html .= '<table class="wp-list-table widefat fixed striped">';
         $html .= '<thead><tr>';
-        $html .= '<th>' . __('Post', 'kk-bulk-date-updates') . '</th>';
-        $html .= '<th>' . __('Current Dates', 'kk-bulk-date-updates') . '</th>';
-        $html .= '<th>' . __('New Dates', 'kk-bulk-date-updates') . '</th>';
+        $html .= '<th>' . __('Post', 'chronocrow-bulk-date-updates') . '</th>';
+        $html .= '<th>' . __('Current Dates', 'chronocrow-bulk-date-updates') . '</th>';
+        $html .= '<th>' . __('New Dates', 'chronocrow-bulk-date-updates') . '</th>';
         $html .= '</tr></thead><tbody>';
         
         foreach ($preview_data as $change) {
             $html .= '<tr>';
-            $html .= '<td><strong>' . esc_html($change['post_title']) . '</strong><br><small>' . esc_html__( 'ID:', 'kk-bulk-date-updates' ) . ' ' . $change['post_id'] . ' (' . $change['post_type'] . ')</small></td>';
+            $html .= '<td><strong>' . esc_html($change['post_title']) . '</strong><br><small>' . esc_html__( 'ID:', 'chronocrow-bulk-date-updates' ) . ' ' . $change['post_id'] . ' (' . $change['post_type'] . ')</small></td>';
             
             // Current dates
             $html .= '<td>';
             foreach ($change['current_dates'] as $field => $date) {
-                $field_label = $field === 'post_date' ? __('Published', 'kk-bulk-date-updates') : __('Modified', 'kk-bulk-date-updates');
+                $field_label = $field === 'post_date' ? __('Published', 'chronocrow-bulk-date-updates') : __('Modified', 'chronocrow-bulk-date-updates');
                 $html .= '<strong>' . $field_label . ':</strong> ' . esc_html($date) . '<br>';
             }
             $html .= '</td>';
@@ -549,7 +549,7 @@ class BDUK_Plugin {
             // New dates
             $html .= '<td>';
             foreach ($change['new_dates'] as $field => $date) {
-                $field_label = $field === 'post_date' ? __('Published', 'kk-bulk-date-updates') : __('Modified', 'kk-bulk-date-updates');
+                $field_label = $field === 'post_date' ? __('Published', 'chronocrow-bulk-date-updates') : __('Modified', 'chronocrow-bulk-date-updates');
                 $html .= '<strong>' . $field_label . ':</strong> ' . esc_html($date) . '<br>';
             }
             $html .= '</td>';
@@ -592,7 +592,7 @@ class BDUK_Plugin {
             
             foreach ($batch as $post_id) {
                 if (!isset($posts[$post_id])) {
-                    $errors[] = sprintf(__('Post ID %d not found', 'kk-bulk-date-updates'), $post_id);
+                    $errors[] = sprintf(__('Post ID %d not found', 'chronocrow-bulk-date-updates'), $post_id);
                     continue;
                 }
                 
@@ -608,7 +608,7 @@ class BDUK_Plugin {
                     $result = $this->update_post_dates_direct($post_id, $update_data);
                     
                     if ($result === false) {
-                        $errors[] = sprintf(__('Failed to update post ID %d', 'kk-bulk-date-updates'), $post_id);
+                        $errors[] = sprintf(__('Failed to update post ID %d', 'chronocrow-bulk-date-updates'), $post_id);
                     } else {
                         $updated_count++;
                         
@@ -635,7 +635,7 @@ class BDUK_Plugin {
         
         // Add performance info to response
         $performance_info = sprintf(
-            __('Processed %d posts in %d batches with optimized database operations.', 'kk-bulk-date-updates'),
+            __('Processed %d posts in %d batches with optimized database operations.', 'chronocrow-bulk-date-updates'),
             count($post_ids),
             count($batches)
         );
@@ -647,13 +647,13 @@ class BDUK_Plugin {
                     'Successfully updated %d post.',
                     'Successfully updated %d posts.',
                     $updated_count,
-                    'kk-bulk-date-updates'
+                    'chronocrow-bulk-date-updates'
                 ),
                 $updated_count
             );
             
             if (!empty($errors)) {
-                $message .= ' ' . sprintf(__('However, %d errors occurred.', 'kk-bulk-date-updates'), count($errors));
+                $message .= ' ' . sprintf(__('However, %d errors occurred.', 'chronocrow-bulk-date-updates'), count($errors));
             }
             
             return array(
@@ -669,7 +669,7 @@ class BDUK_Plugin {
         } else {
             return array(
                 'success' => true,
-                'message' => __('No posts needed updating. The matching posts already have the target dates for this update method.', 'kk-bulk-date-updates'),
+                'message' => __('No posts needed updating. The matching posts already have the target dates for this update method.', 'chronocrow-bulk-date-updates'),
                 'data' => array(
                     'updated_count' => 0,
                     'errors' => $errors,
@@ -784,7 +784,7 @@ class BDUK_Plugin {
      */
     public function admin_enqueue_scripts($hook) {
         // Only load on our admin page
-        if ('tools_page_kk-bulk-date-updates' !== $hook) {
+        if ('tools_page_chronocrow-bulk-date-updates' !== $hook) {
             return;
         }
         
@@ -811,24 +811,24 @@ class BDUK_Plugin {
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('bduk_bulk_date_updates_nonce'),
                 'strings' => array(
-                    'processing' => __('Processing...', 'kk-bulk-date-updates'),
-                    'error' => __('An error occurred', 'kk-bulk-date-updates'),
-                    'success' => __('Operation completed successfully', 'kk-bulk-date-updates'),
-                    'confirmReset' => __('Are you sure you want to reset all fields?', 'kk-bulk-date-updates'),
-                    'permissionDenied' => __('Permission denied. Please refresh the page and try again.', 'kk-bulk-date-updates'),
-                    'serverError' => __('Server error occurred. Please try again.', 'kk-bulk-date-updates'),
-                    'networkError' => __('Network connection error. Please check your connection and try again.', 'kk-bulk-date-updates'),
-                    'idLabel' => __('ID:', 'kk-bulk-date-updates'),
-                    'publishedLabel' => __('Published:', 'kk-bulk-date-updates'),
-                    'modifiedLabel' => __('Modified:', 'kk-bulk-date-updates'),
-                    'publishedDateLabel' => __('Published Date', 'kk-bulk-date-updates'),
-                    'modifiedDateLabel' => __('Modified Date', 'kk-bulk-date-updates'),
+                    'processing' => __('Processing...', 'chronocrow-bulk-date-updates'),
+                    'error' => __('An error occurred', 'chronocrow-bulk-date-updates'),
+                    'success' => __('Operation completed successfully', 'chronocrow-bulk-date-updates'),
+                    'confirmReset' => __('Are you sure you want to reset all fields?', 'chronocrow-bulk-date-updates'),
+                    'permissionDenied' => __('Permission denied. Please refresh the page and try again.', 'chronocrow-bulk-date-updates'),
+                    'serverError' => __('Server error occurred. Please try again.', 'chronocrow-bulk-date-updates'),
+                    'networkError' => __('Network connection error. Please check your connection and try again.', 'chronocrow-bulk-date-updates'),
+                    'idLabel' => __('ID:', 'chronocrow-bulk-date-updates'),
+                    'publishedLabel' => __('Published:', 'chronocrow-bulk-date-updates'),
+                    'modifiedLabel' => __('Modified:', 'chronocrow-bulk-date-updates'),
+                    'publishedDateLabel' => __('Published Date', 'chronocrow-bulk-date-updates'),
+                    'modifiedDateLabel' => __('Modified Date', 'chronocrow-bulk-date-updates'),
                     'updateMethods' => array(
-                        'add_days' => __('Add Days', 'kk-bulk-date-updates'),
-                        'subtract_days' => __('Subtract Days', 'kk-bulk-date-updates'),
-                        'match_modified_to_published' => __('Match Modified to Published', 'kk-bulk-date-updates'),
-                        'specific_date' => __('Set Specific Date (TBA)', 'kk-bulk-date-updates'),
-                        'random_range' => __('Random Date Range (TBA)', 'kk-bulk-date-updates'),
+                        'add_days' => __('Add Days', 'chronocrow-bulk-date-updates'),
+                        'subtract_days' => __('Subtract Days', 'chronocrow-bulk-date-updates'),
+                        'match_modified_to_published' => __('Match Modified to Published', 'chronocrow-bulk-date-updates'),
+                        'specific_date' => __('Set Specific Date (TBA)', 'chronocrow-bulk-date-updates'),
+                        'random_range' => __('Random Date Range (TBA)', 'chronocrow-bulk-date-updates'),
                     ),
                 )
             )

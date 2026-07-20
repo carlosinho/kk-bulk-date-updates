@@ -17,13 +17,13 @@ if (!defined('ABSPATH')) {
     
     <?php /*
     <div class="notice notice-info">
-        <p><strong><?php _e('Performance Optimized:', 'kk-bulk-date-updates'); ?></strong> 
-        <?php _e('This plugin uses optimized database operations and batch processing for better performance. Large operations (1000+ posts) require at least 512MB PHP memory limit.', 'kk-bulk-date-updates'); ?></p>
+        <p><strong><?php _e('Performance Optimized:', 'chronocrow-bulk-date-updates'); ?></strong>
+        <?php _e('This plugin uses optimized database operations and batch processing for better performance. Large operations (1000+ posts) require at least 512MB PHP memory limit.', 'chronocrow-bulk-date-updates'); ?></p>
     </div>
     */ ?>
 
     <div class="bduk-form">
-        <h2><?php _e('Bulk Date Update Settings', 'kk-bulk-date-updates'); ?></h2>
+        <h2><?php _e('Bulk Date Update Settings', 'chronocrow-bulk-date-updates'); ?></h2>
         
         <form method="post" action="" class="bduk-form">
             <?php wp_nonce_field('bduk_bulk_date_updates_nonce', 'bduk_bulk_date_updates_nonce'); ?>
@@ -32,7 +32,7 @@ if (!defined('ABSPATH')) {
                 <tbody>
                     <tr>
                         <th scope="row">
-                            <label for="post_types"><?php _e('Post Types', 'kk-bulk-date-updates'); ?></label>
+                            <label for="post_types"><?php _e('Post Types', 'chronocrow-bulk-date-updates'); ?></label>
                         </th>
                         <td>
                             <?php
@@ -46,43 +46,43 @@ if (!defined('ABSPATH')) {
                                 }
                             }
                             ?>
-                            <p class="description"><?php _e('Select which post types to update.', 'kk-bulk-date-updates'); ?> <?php _e('This plugin only works with published content. Draft, private, and pending posts are not affected.', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description"><?php _e('Select which post types to update.', 'chronocrow-bulk-date-updates'); ?> <?php _e('This plugin only works with published content. Draft, private, and pending posts are not affected.', 'chronocrow-bulk-date-updates'); ?></p>
                         </td>
                     </tr>
                     
                     <tr>
                         <th scope="row">
-                            <label for="content_filter"><?php _e('Content Filters', 'kk-bulk-date-updates'); ?></label>
+                            <label for="content_filter"><?php _e('Content Filters', 'chronocrow-bulk-date-updates'); ?></label>
                         </th>
                         <td>
                             <select name="content_filter" id="content_filter">
-                                <option value="none"><?php _e('No Filter (All Content)', 'kk-bulk-date-updates'); ?></option>
-                                <option value="date_range"><?php _e('Published Date Range', 'kk-bulk-date-updates'); ?></option>
-                                <option value="count_limit"><?php _e('Latest/Oldest Posts', 'kk-bulk-date-updates'); ?></option>
-                                <option value="category_tag"><?php _e('Category/Tag Filter', 'kk-bulk-date-updates'); ?></option>
+                                <option value="none"><?php _e('No Filter (All Content)', 'chronocrow-bulk-date-updates'); ?></option>
+                                <option value="date_range"><?php _e('Published Date Range', 'chronocrow-bulk-date-updates'); ?></option>
+                                <option value="count_limit"><?php _e('Latest/Oldest Posts', 'chronocrow-bulk-date-updates'); ?></option>
+                                <option value="category_tag"><?php _e('Category/Tag Filter', 'chronocrow-bulk-date-updates'); ?></option>
                             </select>
-                            <p class="description"><?php _e('Filter which content to include in the bulk update.', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description"><?php _e('Filter which content to include in the bulk update.', 'chronocrow-bulk-date-updates'); ?></p>
                             
                             <!-- Date Range Filter -->
                             <div id="filter_date_range_options" class="bduk-filter-options" style="display: none; margin-top: 10px;">
-                                <label><?php _e('Published between:', 'kk-bulk-date-updates'); ?></label><br>
+                                <label><?php _e('Published between:', 'chronocrow-bulk-date-updates'); ?></label><br>
                                 <input type="date" name="filter_date_start" id="filter_date_start" class="regular-text">
-                                <span><?php _e('and', 'kk-bulk-date-updates'); ?></span>
+                                <span><?php _e('and', 'chronocrow-bulk-date-updates'); ?></span>
                                 <input type="date" name="filter_date_end" id="filter_date_end" class="regular-text">
-                                <p class="description"><?php _e('Only update content published within this date range.', 'kk-bulk-date-updates'); ?></p>
+                                <p class="description"><?php _e('Only update content published within this date range.', 'chronocrow-bulk-date-updates'); ?></p>
                             </div>
                             
                             <!-- Count Limit Filter -->
                             <div id="filter_count_limit_options" class="bduk-filter-options" style="display: none; margin-top: 10px;">
-                                <label><?php _e('Update only:', 'kk-bulk-date-updates'); ?></label><br>
+                                <label><?php _e('Update only:', 'chronocrow-bulk-date-updates'); ?></label><br>
                                 <input type="number" name="filter_count" id="filter_count" min="1" max="1000" value="10" class="small-text">
                                 <label>
-                                    <input type="radio" name="filter_order" value="latest" checked> <?php _e('Latest posts', 'kk-bulk-date-updates'); ?>
+                                    <input type="radio" name="filter_order" value="latest" checked> <?php _e('Latest posts', 'chronocrow-bulk-date-updates'); ?>
                                 </label>
                                 <label>
-                                    <input type="radio" name="filter_order" value="oldest"> <?php _e('Oldest posts', 'kk-bulk-date-updates'); ?>
+                                    <input type="radio" name="filter_order" value="oldest"> <?php _e('Oldest posts', 'chronocrow-bulk-date-updates'); ?>
                                 </label>
-                                <p class="description"><?php _e('Limit the update to a specific number of latest or oldest posts.', 'kk-bulk-date-updates'); ?></p>
+                                <p class="description"><?php _e('Limit the update to a specific number of latest or oldest posts.', 'chronocrow-bulk-date-updates'); ?></p>
                             </div>
                             
                             <!-- Category/Tag Filter -->
@@ -90,7 +90,7 @@ if (!defined('ABSPATH')) {
                                 <div id="bduk-taxonomy-selectors">
                                     <!-- Categories (for posts) -->
                                     <div class="bduk-taxonomy-group" data-post-type="post">
-                                        <label><?php _e('Categories:', 'kk-bulk-date-updates'); ?></label><br>
+                                        <label><?php _e('Categories:', 'chronocrow-bulk-date-updates'); ?></label><br>
                                         <select name="filter_categories[]" id="filter_categories" multiple size="4" style="min-width: 300px;">
                                             <?php
                                             $categories = get_categories(array('hide_empty' => false));
@@ -102,7 +102,7 @@ if (!defined('ABSPATH')) {
                                     </div>
                                     
                                     <div class="bduk-taxonomy-group" data-post-type="post" style="margin-top: 10px;">
-                                        <label><?php _e('Tags:', 'kk-bulk-date-updates'); ?></label><br>
+                                        <label><?php _e('Tags:', 'chronocrow-bulk-date-updates'); ?></label><br>
                                         <select name="filter_tags[]" id="filter_tags" multiple size="4" style="min-width: 300px;">
                                             <?php
                                             $tags = get_tags(array('hide_empty' => false));
@@ -115,110 +115,110 @@ if (!defined('ABSPATH')) {
                                     
                                     <!-- Pages (no categories/tags by default) -->
                                     <div class="bduk-taxonomy-group" data-post-type="page" style="display: none;">
-                                        <p><em><?php _e('Pages do not have categories or tags by default.', 'kk-bulk-date-updates'); ?></em></p>
+                                        <p><em><?php _e('Pages do not have categories or tags by default.', 'chronocrow-bulk-date-updates'); ?></em></p>
                                     </div>
                                 </div>
-                                <p class="description"><?php _e('Select categories or tags to filter content. Hold Ctrl/Cmd to select multiple.', 'kk-bulk-date-updates'); ?></p>
+                                <p class="description"><?php _e('Select categories or tags to filter content. Hold Ctrl/Cmd to select multiple.', 'chronocrow-bulk-date-updates'); ?></p>
                             </div>
                         </td>
                     </tr>
                     
                     <tr>
                         <th scope="row">
-                            <label><?php _e('Date Fields', 'kk-bulk-date-updates'); ?></label>
+                            <label><?php _e('Date Fields', 'chronocrow-bulk-date-updates'); ?></label>
                         </th>
                         <td>
                             <div class="bduk-date-fields-container">
                                 <label>
                                     <input type="checkbox" name="date_fields[]" value="post_date" id="date_field_published" checked>
-                                    <?php _e('Published Date', 'kk-bulk-date-updates'); ?>
+                                    <?php _e('Published Date', 'chronocrow-bulk-date-updates'); ?>
                                 </label>
                                 
                                 <label>
                                     <input type="checkbox" name="date_fields[]" value="post_modified" id="date_field_modified">
-                                    <?php _e('Modified Date', 'kk-bulk-date-updates'); ?>
+                                    <?php _e('Modified Date', 'chronocrow-bulk-date-updates'); ?>
                                     <span class="bduk-modified-date-offset">
-                                        <?php _e('with', 'kk-bulk-date-updates'); ?>
+                                        <?php _e('with', 'chronocrow-bulk-date-updates'); ?>
                                         <input type="number" name="modified_date_offset" id="modified_date_offset" min="0" max="1440" value="5" class="small-text">
-                                        <?php _e('minutes offset', 'kk-bulk-date-updates'); ?>
+                                        <?php _e('minutes offset', 'chronocrow-bulk-date-updates'); ?>
                                     </span>
                                 </label>
                             </div>
                             
-                            <p class="description"><?php _e('Select which date fields to update.', 'kk-bulk-date-updates'); ?></p>
-                            <p class="description bduk-match-method-note" style="display: none; color: #0073aa; font-style: italic;"><?php _e('Both date fields are automatically selected and locked when using "Match Modified to Published" method.', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description"><?php _e('Select which date fields to update.', 'chronocrow-bulk-date-updates'); ?></p>
+                            <p class="description bduk-match-method-note" style="display: none; color: #0073aa; font-style: italic;"><?php _e('Both date fields are automatically selected and locked when using "Match Modified to Published" method.', 'chronocrow-bulk-date-updates'); ?></p>
                         </td>
                     </tr>
                     
                     <tr>
                         <th scope="row">
-                            <label for="update_method"><?php _e('Update Method', 'kk-bulk-date-updates'); ?></label>
+                            <label for="update_method"><?php _e('Update Method', 'chronocrow-bulk-date-updates'); ?></label>
                         </th>
                         <td>
                             <select name="update_method" id="update_method">
-                                <option value="add_days"><?php _e('Add Days', 'kk-bulk-date-updates'); ?></option>
-                                <option value="subtract_days"><?php _e('Subtract Days', 'kk-bulk-date-updates'); ?></option>
-                                <option value="match_modified_to_published"><?php _e('Match Modified to Published', 'kk-bulk-date-updates'); ?></option>
-                                <option value="specific_date"><?php _e('Set Specific Date (TBA)', 'kk-bulk-date-updates'); ?></option>
-                                <option value="random_range"><?php _e('Random Date Range (TBA)', 'kk-bulk-date-updates'); ?></option>
+                                <option value="add_days"><?php _e('Add Days', 'chronocrow-bulk-date-updates'); ?></option>
+                                <option value="subtract_days"><?php _e('Subtract Days', 'chronocrow-bulk-date-updates'); ?></option>
+                                <option value="match_modified_to_published"><?php _e('Match Modified to Published', 'chronocrow-bulk-date-updates'); ?></option>
+                                <option value="specific_date"><?php _e('Set Specific Date (TBA)', 'chronocrow-bulk-date-updates'); ?></option>
+                                <option value="random_range"><?php _e('Random Date Range (TBA)', 'chronocrow-bulk-date-updates'); ?></option>
                             </select>
-                            <p class="description"><?php _e('Choose how to update the dates.', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description"><?php _e('Choose how to update the dates.', 'chronocrow-bulk-date-updates'); ?></p>
                         </td>
                     </tr>
                     
                     <tr id="specific_date_row">
                         <th scope="row">
-                            <label for="specific_date"><?php _e('Specific Date', 'kk-bulk-date-updates'); ?></label>
+                            <label for="specific_date"><?php _e('Specific Date', 'chronocrow-bulk-date-updates'); ?></label>
                         </th>
                         <td>
                             <input type="date" name="specific_date" id="specific_date" class="regular-text">
                             <input type="time" name="specific_time" id="specific_time" value="12:00">
-                            <p class="description"><?php _e('Set the exact date and time.', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description"><?php _e('Set the exact date and time.', 'chronocrow-bulk-date-updates'); ?></p>
                         </td>
                     </tr>
                     
                     <tr id="days_row" style="display: none;">
                         <th scope="row">
-                            <label for="days_value"><?php _e('Number of Days', 'kk-bulk-date-updates'); ?></label>
+                            <label for="days_value"><?php _e('Number of Days', 'chronocrow-bulk-date-updates'); ?></label>
                         </th>
                         <td>
                             <input type="number" name="days_value" id="days_value" min="1" max="3650" value="1" class="small-text">
-                            <p class="description"><?php _e('Number of days to add or subtract.', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description"><?php _e('Number of days to add or subtract.', 'chronocrow-bulk-date-updates'); ?></p>
                         </td>
                     </tr>
                     
                     <tr id="date_range_row" style="display: none;">
                         <th scope="row">
-                            <label for="start_date"><?php _e('Date Range', 'kk-bulk-date-updates'); ?></label>
+                            <label for="start_date"><?php _e('Date Range', 'chronocrow-bulk-date-updates'); ?></label>
                         </th>
                         <td>
                             <input type="date" name="start_date" id="start_date" class="regular-text">
-                            <span><?php _e('to', 'kk-bulk-date-updates'); ?></span>
+                            <span><?php _e('to', 'chronocrow-bulk-date-updates'); ?></span>
                             <input type="date" name="end_date" id="end_date" class="regular-text">
-                            <p class="description"><?php _e('Posts will be assigned random dates within this range.', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description"><?php _e('Posts will be assigned random dates within this range.', 'chronocrow-bulk-date-updates'); ?></p>
                         </td>
                     </tr>
                     
                     <tr>
                         <th scope="row">
-                            <label for="limit_posts"><?php _e('Limit Posts', 'kk-bulk-date-updates'); ?></label>
+                            <label for="limit_posts"><?php _e('Limit Posts', 'chronocrow-bulk-date-updates'); ?></label>
                         </th>
                         <td>
                             <input type="number" name="limit_posts" id="limit_posts" min="1" max="10000" value="100" class="small-text">
-                            <p class="description"><?php _e('Maximum number of posts to update (for safety). This applies after content filters.', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description"><?php _e('Maximum number of posts to update (for safety). This applies after content filters.', 'chronocrow-bulk-date-updates'); ?></p>
                         </td>
                     </tr>
                     
                     <tr>
                         <th scope="row">
-                            <label for="dry_run"><?php _e('Test Mode', 'kk-bulk-date-updates'); ?></label>
+                            <label for="dry_run"><?php _e('Test Mode', 'chronocrow-bulk-date-updates'); ?></label>
                         </th>
                         <td>
                             <label>
                                 <input type="checkbox" name="dry_run" id="dry_run" value="1" checked>
-                                <?php _e('Enable test mode (preview changes without updating)', 'kk-bulk-date-updates'); ?>
+                                <?php _e('Enable test mode (preview changes without updating)', 'chronocrow-bulk-date-updates'); ?>
                             </label>
-                            <p class="description"><?php _e('Recommended: Test your settings first before making actual changes.', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description"><?php _e('Recommended: Test your settings first before making actual changes.', 'chronocrow-bulk-date-updates'); ?></p>
                         </td>
                     </tr>
                 </tbody>
@@ -231,28 +231,28 @@ if (!defined('ABSPATH')) {
             </div>
             
             <p class="submit">
-                <input type="submit" name="submit" id="submit" class="button button-primary bduk-button" value="<?php _e('Preview Changes', 'kk-bulk-date-updates'); ?>">
-                <button type="button" class="button bduk-reset-button"><?php _e('Reset Form', 'kk-bulk-date-updates'); ?></button>
+                <input type="submit" name="submit" id="submit" class="button button-primary bduk-button" value="<?php _e('Preview Changes', 'chronocrow-bulk-date-updates'); ?>">
+                <button type="button" class="button bduk-reset-button"><?php _e('Reset Form', 'chronocrow-bulk-date-updates'); ?></button>
             </p>
         </form>
     </div>
     
     <div class="bduk-form" id="bduk-recent-activity-section">
-        <h2><?php _e('Recent Activity', 'kk-bulk-date-updates'); ?></h2>
-        <?php /* <p><?php _e('Recent bulk date update operations will be displayed here after each operation.', 'kk-bulk-date-updates'); ?></p> */ ?>
+        <h2><?php _e('Recent Activity', 'chronocrow-bulk-date-updates'); ?></h2>
+        <?php /* <p><?php _e('Recent bulk date update operations will be displayed here after each operation.', 'chronocrow-bulk-date-updates'); ?></p> */ ?>
         
         <div id="bduk-activity-log-container">
             <table class="wp-list-table widefat striped" id="bduk-activity-log-table">
                 <thead>
                     <tr>
-                        <th><?php _e('Post', 'kk-bulk-date-updates'); ?></th>
-                        <th><?php _e('Fields Updated', 'kk-bulk-date-updates'); ?></th>
-                        <th><?php _e('Method', 'kk-bulk-date-updates'); ?></th>
+                        <th><?php _e('Post', 'chronocrow-bulk-date-updates'); ?></th>
+                        <th><?php _e('Fields Updated', 'chronocrow-bulk-date-updates'); ?></th>
+                        <th><?php _e('Method', 'chronocrow-bulk-date-updates'); ?></th>
                     </tr>
                 </thead>
                 <tbody id="bduk-activity-log-tbody">
                     <tr id="bduk-no-activity-row">
-                        <td colspan="3"><?php _e('No recent activity. Perform a bulk update operation to see results here.', 'kk-bulk-date-updates'); ?></td>
+                        <td colspan="3"><?php _e('No recent activity. Perform a bulk update operation to see results here.', 'chronocrow-bulk-date-updates'); ?></td>
                     </tr>
                 </tbody>
             </table>
@@ -354,9 +354,9 @@ jQuery(document).ready(function($) {
     $('#dry_run').on('change', function() {
         const $submitBtn = $('#submit');
         if ($(this).is(':checked')) {
-            $submitBtn.val('<?php _e('Preview Changes', 'kk-bulk-date-updates'); ?>');
+            $submitBtn.val('<?php _e('Preview Changes', 'chronocrow-bulk-date-updates'); ?>');
         } else {
-            $submitBtn.val('<?php _e('Update Dates', 'kk-bulk-date-updates'); ?>');
+            $submitBtn.val('<?php _e('Update Dates', 'chronocrow-bulk-date-updates'); ?>');
         }
     });
     

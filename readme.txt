@@ -1,10 +1,10 @@
-=== Bulk Date Updates by KK ===
+=== Chronocrow Bulk Date Updates ===
 Contributors: karol-k
 Tags: dates, bulk edit, posts, admin, maintenance
 Requires at least: 6.0
 Tested up to: 7.0.2
 Requires PHP: 7.4
-Stable tag: 0.22
+Stable tag: 0.30
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Bulk update published and modified dates across many WordPress posts from a sing
 
 == Description ==
 
-Bulk Date Updates by KK adds an admin-only screen under Tools for changing dates across many posts in one operation.
+Chronocrow Bulk Date Updates adds an admin-only screen under Tools for changing dates across many posts in one operation.
 
 The plugin is built for timeline corrections and other date maintenance tasks where editing posts one by one would be too slow. It stays inside wp-admin, targets published content only, and defaults to preview mode so you can inspect the first affected rows before writing changes.
 
@@ -37,7 +37,7 @@ Important notes:
 == Installation ==
 
 1. Upload the plugin folder to `/wp-content/plugins/`, or install it through WordPress if a package is available.
-2. Activate `Bulk Date Updates by KK` in the Plugins screen.
+2. Activate `Chronocrow Bulk Date Updates` in the Plugins screen.
 3. Open `Tools > Bulk Date Updates`.
 4. Leave `Test Mode` enabled for the first run, review the preview, then apply changes when ready.
 
@@ -55,11 +55,11 @@ Preview mode returns the first matching posts that would actually change, includ
 
 No. For performance, it writes the date columns directly in `wp_posts`. That is faster for large operations, but code attached to normal post-save hooks will not run for these updates.
 
-= Are all visible update methods implemented? =
-
-No. Version 0.20 implements `Add Days`, `Subtract Days`, and `Match Modified to Published`. The `Set Specific Date (TBA)` and `Random Date Range (TBA)` options are placeholders for future work.
-
 == Changelog ==
+
+= 0.30 =
+
+* Rebrand the plugin as Chronocrow Bulk Date Updates.
 
 = 0.20 =
 
