@@ -11,6 +11,7 @@ The plugin is a small admin-only WordPress plugin with one main orchestration cl
 Runtime entry points:
 
 - plugin bootstrap file: `kk-bulk-date-updates.php`
+- main orchestration class: `includes/class-bduk-plugin.php`
 - date resolver: `includes/class-bduk-date-resolver.php`
 - admin page view: `includes/admin/admin-page.php`
 - AJAX client: `js/admin.js`
@@ -38,13 +39,14 @@ That philosophy explains most of the architecture:
 Initialization flow:
 
 1. WordPress loads `kk-bulk-date-updates.php`.
-2. `plugins_loaded` calls `bduk_init()`.
-3. `BDUK_Plugin::get_instance()` constructs the singleton.
-4. `init_hooks()` registers:
+2. The bootstrap defines constants and requires `includes/class-bduk-date-resolver.php` and `includes/class-bduk-plugin.php`.
+3. `plugins_loaded` calls `bduk_init()`.
+4. `BDUK_Plugin::get_instance()` constructs the singleton.
+5. `init_hooks()` registers:
    - `init`
    - `admin_enqueue_scripts`
    - activation, deactivation, and uninstall hooks
-5. On `init`, the plugin loads the text domain and then registers admin behavior only when `is_admin()` is true.
+6. On `init`, the plugin loads the text domain and then registers admin behavior only when `is_admin()` is true.
 
 Lifecycle behavior:
 
@@ -59,6 +61,8 @@ Important exception:
 ## Main Components
 
 ### `BDUK_Plugin`
+
+Defined in `includes/class-bduk-plugin.php`.
 
 Core server-side orchestration in one class:
 

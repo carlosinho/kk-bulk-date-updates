@@ -132,6 +132,7 @@ kk-bulk-date-updates/
 ├── kk-bulk-date-updates.php
 ├── uninstall.php
 ├── includes/
+│   ├── class-bduk-plugin.php
 │   ├── class-bduk-date-resolver.php
 │   └── admin/
 │       └── admin-page.php
@@ -145,8 +146,9 @@ kk-bulk-date-updates/
 
 What each file does:
 
-- `kk-bulk-date-updates.php`: plugin bootstrap, admin hooks, AJAX handler, validation, query building, preview generation, batched writes, activation/deactivation
+- `kk-bulk-date-updates.php`: plugin bootstrap, constants, dependency loading, and startup
 - `uninstall.php`: guarded uninstall cleanup for plugin-owned options
+- `includes/class-bduk-plugin.php`: main orchestration class for admin hooks, AJAX handling, validation, preview generation, batched writes, and lifecycle helpers
 - `includes/class-bduk-date-resolver.php`: shared date calculation for preview and live updates
 - `includes/admin/admin-page.php`: form markup and inline UI behavior for conditional fields
 - `js/admin.js`: AJAX form submission, status messages, preview rendering, activity table rendering

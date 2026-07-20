@@ -64,6 +64,7 @@ The plugin is usable as an admin-only bulk date maintenance tool for published W
   - Should we refactor and improve after the originally written code, which is from last year? Can any of the plugin functionality be implemented in a more efficient way? I'm not looking for changes for the sake of them or fixing security issues that are purely hypothetical and will never happen. I'm looking for actual sub-par execution/implementation.
   - Done:
     - [x] Extract shared date resolution into `includes/class-bduk-date-resolver.php`
+    - [x] Move `BDUK_Plugin` into `includes/class-bduk-plugin.php` and slim `kk-bulk-date-updates.php` down to bootstrap duties
     - [x] DRY preview and live update paths through the resolver
     - [x] Batch-fetch preview posts instead of per-post `get_post()` calls
     - [x] Normalize AJAX responses with `wp_send_json_success()` / `wp_send_json_error()`

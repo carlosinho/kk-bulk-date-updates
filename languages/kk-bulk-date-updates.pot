@@ -123,12 +123,12 @@ msgid "Date Fields"
 msgstr ""
 
 #: includes/admin/admin-page.php:134
-#: kk-bulk-date-updates.php:839
+#: includes/class-bduk-plugin.php:825
 msgid "Published Date"
 msgstr ""
 
 #: includes/admin/admin-page.php:139
-#: kk-bulk-date-updates.php:840
+#: includes/class-bduk-plugin.php:826
 msgid "Modified Date"
 msgstr ""
 
@@ -153,27 +153,27 @@ msgid "Update Method"
 msgstr ""
 
 #: includes/admin/admin-page.php:159
-#: kk-bulk-date-updates.php:842
+#: includes/class-bduk-plugin.php:828
 msgid "Add Days"
 msgstr ""
 
 #: includes/admin/admin-page.php:160
-#: kk-bulk-date-updates.php:843
+#: includes/class-bduk-plugin.php:829
 msgid "Subtract Days"
 msgstr ""
 
 #: includes/admin/admin-page.php:161
-#: kk-bulk-date-updates.php:844
+#: includes/class-bduk-plugin.php:830
 msgid "Match Modified to Published"
 msgstr ""
 
 #: includes/admin/admin-page.php:162
-#: kk-bulk-date-updates.php:845
+#: includes/class-bduk-plugin.php:831
 msgid "Set Specific Date (TBA)"
 msgstr ""
 
 #: includes/admin/admin-page.php:163
-#: kk-bulk-date-updates.php:846
+#: includes/class-bduk-plugin.php:832
 msgid "Random Date Range (TBA)"
 msgstr ""
 
@@ -243,7 +243,7 @@ msgid "Recent Activity"
 msgstr ""
 
 #: includes/admin/admin-page.php:248
-#: kk-bulk-date-updates.php:547
+#: includes/class-bduk-plugin.php:533
 msgid "Post"
 msgstr ""
 
@@ -263,166 +263,166 @@ msgstr ""
 msgid "Update Dates"
 msgstr ""
 
-#: kk-bulk-date-updates.php:112
-#: kk-bulk-date-updates.php:113
+#: includes/class-bduk-plugin.php:98
+#: includes/class-bduk-plugin.php:99
 msgid "Bulk Date Updates"
 msgstr ""
 
-#: kk-bulk-date-updates.php:135
+#: includes/class-bduk-plugin.php:121
 msgid "Security check failed"
 msgstr ""
 
-#: kk-bulk-date-updates.php:140
+#: includes/class-bduk-plugin.php:126
 msgid "Insufficient permissions"
 msgstr ""
 
-#: kk-bulk-date-updates.php:170
+#: includes/class-bduk-plugin.php:156
 msgid "Invalid form data provided"
 msgstr ""
 
-#: kk-bulk-date-updates.php:189
+#: includes/class-bduk-plugin.php:175
 msgid "No posts found matching the specified criteria"
 msgstr ""
 
-#: kk-bulk-date-updates.php:202
+#: includes/class-bduk-plugin.php:188
 #, php-format
 msgid "Large bulk operation detected (%d posts). Please increase PHP memory_limit to at least 512M or reduce the number of posts. Current limit: %s"
 msgstr ""
 
-#: kk-bulk-date-updates.php:305
+#: includes/class-bduk-plugin.php:291
 msgid "Please select at least one date field to update"
 msgstr ""
 
-#: kk-bulk-date-updates.php:316
+#: includes/class-bduk-plugin.php:302
 msgid "Please enter a valid number of days (minimum 1)"
 msgstr ""
 
-#: kk-bulk-date-updates.php:330
+#: includes/class-bduk-plugin.php:316
 msgid "Please provide both start and end dates for date range filter"
 msgstr ""
 
-#: kk-bulk-date-updates.php:337
+#: includes/class-bduk-plugin.php:323
 msgid "Start date must be before end date"
 msgstr ""
 
-#: kk-bulk-date-updates.php:346
+#: includes/class-bduk-plugin.php:332
 msgid "Please enter a valid number between 1 and 1000 for count limit filter"
 msgstr ""
 
-#: kk-bulk-date-updates.php:355
+#: includes/class-bduk-plugin.php:341
 msgid "Please select at least one category or tag for category/tag filter"
 msgstr ""
 
-#: kk-bulk-date-updates.php:451
+#: includes/class-bduk-plugin.php:437
 #, php-format
 msgid "No changes needed for the %d matching posts. Their dates already match the selected update method."
 msgstr ""
 
-#: kk-bulk-date-updates.php:456
+#: includes/class-bduk-plugin.php:442
 #, php-format
 msgid "Preview generated for %1$d posts (%2$d will be updated)"
 msgstr ""
 
-#: kk-bulk-date-updates.php:535
+#: includes/class-bduk-plugin.php:521
 msgid "No changes to preview. The matching posts already have the target dates for this update method."
 msgstr ""
 
-#: kk-bulk-date-updates.php:539
+#: includes/class-bduk-plugin.php:525
 #, php-format
 msgid "Preview: %d posts will be updated"
 msgstr ""
 
-#: kk-bulk-date-updates.php:542
+#: includes/class-bduk-plugin.php:528
 #, php-format
 msgid "Showing the first %1$d posts that need changes out of %2$d total updates."
 msgstr ""
 
-#: kk-bulk-date-updates.php:548
+#: includes/class-bduk-plugin.php:534
 msgid "Current Dates"
 msgstr ""
 
-#: kk-bulk-date-updates.php:549
+#: includes/class-bduk-plugin.php:535
 msgid "New Dates"
 msgstr ""
 
-#: kk-bulk-date-updates.php:554
-#: kk-bulk-date-updates.php:836
+#: includes/class-bduk-plugin.php:540
+#: includes/class-bduk-plugin.php:822
 msgid "ID:"
 msgstr ""
 
-#: kk-bulk-date-updates.php:559
-#: kk-bulk-date-updates.php:567
+#: includes/class-bduk-plugin.php:545
+#: includes/class-bduk-plugin.php:553
 msgid "Published"
 msgstr ""
 
-#: kk-bulk-date-updates.php:559
-#: kk-bulk-date-updates.php:567
+#: includes/class-bduk-plugin.php:545
+#: includes/class-bduk-plugin.php:553
 msgid "Modified"
 msgstr ""
 
-#: kk-bulk-date-updates.php:610
+#: includes/class-bduk-plugin.php:596
 #, php-format
 msgid "Post ID %d not found"
 msgstr ""
 
-#: kk-bulk-date-updates.php:626
+#: includes/class-bduk-plugin.php:612
 #, php-format
 msgid "Failed to update post ID %d"
 msgstr ""
 
-#: kk-bulk-date-updates.php:653
+#: includes/class-bduk-plugin.php:639
 #, php-format
 msgid "Processed %d posts in %d batches with optimized database operations."
 msgstr ""
 
-#: kk-bulk-date-updates.php:661
+#: includes/class-bduk-plugin.php:647
 #, php-format
 msgid "Successfully updated %d post."
 msgid_plural "Successfully updated %d posts."
 msgstr[0] ""
 msgstr[1] ""
 
-#: kk-bulk-date-updates.php:671
+#: includes/class-bduk-plugin.php:657
 #, php-format
 msgid "However, %d errors occurred."
 msgstr ""
 
-#: kk-bulk-date-updates.php:687
+#: includes/class-bduk-plugin.php:673
 msgid "No posts needed updating. The matching posts already have the target dates for this update method."
 msgstr ""
 
-#: kk-bulk-date-updates.php:829
+#: includes/class-bduk-plugin.php:815
 msgid "Processing..."
 msgstr ""
 
-#: kk-bulk-date-updates.php:830
+#: includes/class-bduk-plugin.php:816
 msgid "An error occurred"
 msgstr ""
 
-#: kk-bulk-date-updates.php:831
+#: includes/class-bduk-plugin.php:817
 msgid "Operation completed successfully"
 msgstr ""
 
-#: kk-bulk-date-updates.php:832
+#: includes/class-bduk-plugin.php:818
 msgid "Are you sure you want to reset all fields?"
 msgstr ""
 
-#: kk-bulk-date-updates.php:833
+#: includes/class-bduk-plugin.php:819
 msgid "Permission denied. Please refresh the page and try again."
 msgstr ""
 
-#: kk-bulk-date-updates.php:834
+#: includes/class-bduk-plugin.php:820
 msgid "Server error occurred. Please try again."
 msgstr ""
 
-#: kk-bulk-date-updates.php:835
+#: includes/class-bduk-plugin.php:821
 msgid "Network connection error. Please check your connection and try again."
 msgstr ""
 
-#: kk-bulk-date-updates.php:837
+#: includes/class-bduk-plugin.php:823
 msgid "Published:"
 msgstr ""
 
-#: kk-bulk-date-updates.php:838
+#: includes/class-bduk-plugin.php:824
 msgid "Modified:"
 msgstr ""
