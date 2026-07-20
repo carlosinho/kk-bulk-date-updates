@@ -2,7 +2,7 @@
 
 ## Status
 
-`v0.10` is the current implemented version.
+`v0.20` is the current implemented version.
 
 The plugin is usable as an admin-only bulk date maintenance tool for published WordPress content. Core flows are in place: selecting posts, previewing changes, and applying bulk updates through AJAX. The major unfinished work already visible in the codebase is that `specific_date` and `random_range` are exposed in the UI but still not implemented in backend date calculation and write paths.
 
@@ -60,8 +60,16 @@ The plugin is usable as an admin-only bulk date maintenance tool for published W
 
 ### v0.20 — Tightening
 
-- [ ] Potential refactor.
-    - Should we refactor and improve after the originally written code, which is from last year? Can any of the plugin functionality be implemented in a more efficient way? I'm not looking for changes for the sake of them or fixing security issues that are purely hypothetical and will never happen. I'm looking for actual sub-par execution/implementation.
+- [x] Potential refactor.
+  - Should we refactor and improve after the originally written code, which is from last year? Can any of the plugin functionality be implemented in a more efficient way? I'm not looking for changes for the sake of them or fixing security issues that are purely hypothetical 
+    and will never happen. I'm looking for actual sub-par execution/implementation.
+  - Done:
+    - [x] Extract shared date resolution into `includes/class-date-resolver.php`
+    - [x] DRY preview and live update paths through the resolver
+    - [x] Batch-fetch preview posts instead of per-post `get_post()` calls
+    - [x] Normalize AJAX responses with `wp_send_json_success()` / `wp_send_json_error()`
+    - [x] Fix disabled form fields not being submitted during AJAX
+    - [x] Remove dead code (`create_log_entry()`, unused hook state storage, unused JS helpers)
 
 ### v0.30 — WordPress.org release
 - [ ] Prep plugin for WordPress.org submission.
@@ -89,7 +97,6 @@ The plugin is usable as an admin-only bulk date maintenance tool for published W
 - The plugin has no persistent log table; "Recent Activity" only exists in the current AJAX response
 - The plugin writes directly to `wp_posts`, which is the main performance win, but it bypasses normal `wp_update_post()` behavior
 - During a live run, the plugin removes all callbacks from `save_post`, `wp_insert_post_data`, and `post_updated` for the rest of the request and does not restore them within that request
-- The frontend success handler prefers `response.data.message`, while PHP success messages are currently returned at top-level `message`
 - `modified_date_offset` is sanitized with `absint()`, so negative offsets are not actually supported by the current implementation
 - There are no automated tests, no CI config, and no dedicated WordPress test harness
 - Most server-side logic is concentrated in `KK_Bulk_Date_Updates`, which keeps the plugin simple now but will make further growth harder to manage

@@ -131,6 +131,7 @@ Request requirements enforced by the plugin:
 kk-bulk-date-updates/
 ├── kk-bulk-date-updates.php
 ├── includes/
+│   ├── class-date-resolver.php
 │   └── admin/
 │       └── admin-page.php
 ├── js/
@@ -144,6 +145,7 @@ kk-bulk-date-updates/
 What each file does:
 
 - `kk-bulk-date-updates.php`: plugin bootstrap, admin hooks, AJAX handler, validation, query building, preview generation, batched writes, activation/deactivation
+- `includes/class-date-resolver.php`: shared date calculation for preview and live updates
 - `includes/admin/admin-page.php`: form markup and inline UI behavior for conditional fields
 - `js/admin.js`: AJAX form submission, status messages, preview rendering, activity table rendering
 - `css/admin.css`: admin layout and presentation

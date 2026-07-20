@@ -6,11 +6,12 @@ It is intentionally developer-facing and implementation-specific. For operator u
 
 ## System Shape
 
-The plugin is a small admin-only WordPress plugin with one main PHP class and one admin screen.
+The plugin is a small admin-only WordPress plugin with one main orchestration class, one date resolver class, and one admin screen.
 
 Runtime entry points:
 
 - plugin bootstrap file: `kk-bulk-date-updates.php`
+- date resolver: `includes/class-date-resolver.php`
 - admin page view: `includes/admin/admin-page.php`
 - AJAX client: `js/admin.js`
 
@@ -59,7 +60,7 @@ Important exception:
 
 ### `KK_Bulk_Date_Updates`
 
-Everything server-side lives in one class:
+Core server-side orchestration in one class:
 
 - admin menu registration
 - AJAX request handling
@@ -68,6 +69,8 @@ Everything server-side lives in one class:
 - preview generation
 - batched update execution
 - activation/deactivation helpers
+
+Date calculation is delegated to `KK_Bulk_Date_Updates_Date_Resolver` in `includes/class-date-resolver.php`.
 
 ### `includes/admin/admin-page.php`
 
@@ -165,9 +168,8 @@ Taxonomy rule worth noting:
 
 `generate_preview()`:
 
-- loads each matched post with `get_post()`
-- stops after 10 preview entries
-- uses `calculate_date_changes()` to build old/new values
+- batch-fetches matched posts for the first 10 IDs via `get_posts_batch()`
+- uses `KK_Bulk_Date_Updates_Date_Resolver` to build old/new values
 - returns pre-rendered HTML
 
 Preview is intentionally not a full export of all affected rows.
@@ -282,13 +284,11 @@ The only API surface is WordPress AJAX:
 
 Response shape from PHP:
 
-- top-level `success`
-- top-level `message`
-- optional `data`
+- success responses use `wp_send_json_success()` with `message` inside `data`
+- error responses use `wp_send_json_error()` with `message` inside `data`
+- optional preview, activity log, and performance fields remain in `data`
 
-Current frontend caveat:
-
-- the JS success handler prefers `response.data.message` even though the PHP success message is top-level, so success notices can fall back to the generic localized success string instead of the more specific server message
+The admin JavaScript reads `response.data.message` for both success and error notices.
 
 There is no REST schema, no versioned API layer, and no public endpoint.
 
@@ -393,7 +393,7 @@ Maintenance implications:
 
 Good candidates for future refactoring if the plugin grows:
 
-- split query building, date calculation, and execution into separate services
+- split query building and execution into separate services beyond the date resolver
 - replace inline admin-page script with a dedicated JS module
 - add automated integration tests against a WordPress test environment
 - decide whether activity history should remain ephemeral or become real persisted audit data

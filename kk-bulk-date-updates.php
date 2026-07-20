@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Bulk Date Updates by KK
  * Description: A WordPress plugin for bulk updating dates across posts and pages.
- * Version: 0.10
+ * Version: 0.20
  * Author: Karol K
  * Author URI: https://wpwork.shop/
  * License: GPL v2 or later
@@ -16,10 +16,12 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('KK_BULK_DATE_UPDATES_VERSION', '0.1.0');
+define('KK_BULK_DATE_UPDATES_VERSION', '0.20');
 define('KK_BULK_DATE_UPDATES_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('KK_BULK_DATE_UPDATES_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('KK_BULK_DATE_UPDATES_PLUGIN_BASENAME', plugin_basename(__FILE__));
+
+require_once KK_BULK_DATE_UPDATES_PLUGIN_PATH . 'includes/class-date-resolver.php';
 
 /**
  * Main plugin class
@@ -34,11 +36,11 @@ class KK_Bulk_Date_Updates {
     private static $instance = null;
     
     /**
-     * Store original hooks state for restoration
+     * Date resolver for preview and live updates.
      *
-     * @var array
+     * @var KK_Bulk_Date_Updates_Date_Resolver
      */
-    private $original_hooks = array();
+    private $date_resolver;
     
     /**
      * Get plugin instance
@@ -56,6 +58,7 @@ class KK_Bulk_Date_Updates {
      * Constructor
      */
     private function __construct() {
+        $this->date_resolver = new KK_Bulk_Date_Updates_Date_Resolver();
         $this->init_hooks();
     }
     
@@ -137,7 +140,18 @@ class KK_Bulk_Date_Updates {
         // Process the bulk date update request
         $response = $this->process_bulk_date_update();
         
-        wp_send_json($response);
+        if ( ! empty( $response['success'] ) ) {
+            $data = isset( $response['data'] ) ? $response['data'] : array();
+            $data['message'] = $response['message'];
+            wp_send_json_success( $data );
+        }
+
+        wp_send_json_error(
+            array(
+                'message' => $response['message'],
+                'data'    => isset( $response['data'] ) ? $response['data'] : array(),
+            )
+        );
     }
     
     /**
@@ -223,6 +237,11 @@ class KK_Bulk_Date_Updates {
         $sanitized['update_method'] = isset($post_data['update_method']) 
             ? sanitize_text_field($post_data['update_method']) 
             : 'add_days';
+
+        // Match Modified to Published always targets both fields.
+        if ('match_modified_to_published' === $sanitized['update_method']) {
+            $sanitized['date_fields'] = array('post_date', 'post_modified');
+        }
             
         // Days value
         $sanitized['days_value'] = isset($post_data['days_value']) 
@@ -419,156 +438,105 @@ class KK_Bulk_Date_Updates {
      * Generate preview for dry run
      */
     private function generate_preview($post_ids, $form_data) {
-        $preview_data = array();
-        $count = 0;
-        
-        foreach ($post_ids as $post_id) {
-            if ($count >= 10) { // Limit preview to first 10 posts
-                break;
-            }
-            
-            $post = get_post($post_id);
-            if (!$post) continue;
-            
-            $changes = $this->calculate_date_changes($post, $form_data);
-            if ($changes) {
-                $preview_data[] = $changes;
-                $count++;
-            }
-        }
-        
+        $preview_data = $this->get_preview_data($post_ids, $form_data);
         $total_posts = count($post_ids);
-        $preview_html = $this->generate_preview_html($preview_data, $total_posts, $form_data);
+        $posts_needing_update = $this->count_posts_needing_update($post_ids, $form_data);
+        $preview_html = $this->generate_preview_html($preview_data, $total_posts, $posts_needing_update, $form_data);
+
+        if (0 === $posts_needing_update) {
+            $message = sprintf(
+                __('No changes needed for the %d matching posts. Their dates already match the selected update method.', 'kk-bulk-date-updates'),
+                $total_posts
+            );
+        } else {
+            $message = sprintf(
+                __('Preview generated for %1$d posts (%2$d will be updated)', 'kk-bulk-date-updates'),
+                $total_posts,
+                $posts_needing_update
+            );
+        }
         
         return array(
             'success' => true,
-            'message' => sprintf(__('Preview generated for %d posts', 'kk-bulk-date-updates'), $total_posts),
+            'message' => $message,
             'data' => array(
                 'preview_html' => $preview_html,
                 'total_posts' => $total_posts,
-                'preview_count' => count($preview_data)
+                'preview_count' => count($preview_data),
+                'posts_needing_update' => $posts_needing_update
             )
         );
     }
-    
+
     /**
-     * Calculate date changes for a post
+     * Build preview rows for the first posts that actually need updates.
      */
-    private function calculate_date_changes($post, $form_data) {
-        $changes = array(
-            'post_id' => $post->ID,
-            'post_title' => $post->post_title,
-            'post_type' => $post->post_type,
-            'current_dates' => array(),
-            'new_dates' => array()
-        );
-        
-        $new_published_date = null;
-        $both_dates_selected = in_array('post_date', $form_data['date_fields']) && in_array('post_modified', $form_data['date_fields']);
-        
-        // First pass: calculate published date if selected
-        if (in_array('post_date', $form_data['date_fields'])) {
-            $current_date = $post->post_date;
-            $new_date = $this->calculate_new_date($current_date, $form_data, 'post_date', 0, $post);
-            
-            if ($current_date && $new_date) {
-                $changes['current_dates']['post_date'] = $current_date;
-                $changes['new_dates']['post_date'] = $new_date;
-                $new_published_date = $new_date;
-            }
-        }
-        
-        // Special case: For "Match Modified to Published", always show published date in preview
-        if ($form_data['update_method'] === 'match_modified_to_published' && !isset($changes['current_dates']['post_date'])) {
-            $changes['current_dates']['post_date'] = $post->post_date;
-            $changes['new_dates']['post_date'] = $post->post_date; // No change to published date
-        }
-        
-        // Second pass: calculate modified date
-        $should_calculate_modified = in_array('post_modified', $form_data['date_fields']) || $form_data['update_method'] === 'match_modified_to_published';
-        
-        if ($should_calculate_modified) {
-            $current_date = $post->post_modified;
-            
-            if ($form_data['update_method'] === 'match_modified_to_published') {
-                // For "Match Modified to Published", always use published date as base with the specified offset
-                $new_date = $this->calculate_modified_date_from_published($post->post_date, $form_data['modified_date_offset']);
-            } elseif ($both_dates_selected && $new_published_date) {
-                // Use new published date as base for modified date calculation
-                $new_date = $this->calculate_modified_date_from_published($new_published_date, $form_data['modified_date_offset']);
-            } else {
-                // Use current modified date as base
-                $new_date = $this->calculate_new_date($current_date, $form_data, 'post_modified', $form_data['modified_date_offset'], $post);
-            }
-            
-            if ($current_date && $new_date) {
-                $changes['current_dates']['post_modified'] = $current_date;
-                $changes['new_dates']['post_modified'] = $new_date;
-            }
-        }
-        
-        return !empty($changes['new_dates']) ? $changes : null;
-    }
-    
-    /**
-     * Calculate new date based on update method
-     */
-    private function calculate_new_date($current_date, $form_data, $date_field, $offset_minutes = 0, $post = null) {
-        $timestamp = strtotime($current_date);
-        
-        switch ($form_data['update_method']) {
-            case 'add_days':
-                $new_timestamp = $timestamp + ($form_data['days_value'] * DAY_IN_SECONDS);
-                break;
-                
-            case 'subtract_days':
-                $new_timestamp = $timestamp - ($form_data['days_value'] * DAY_IN_SECONDS);
-                break;
-                
-            case 'match_modified_to_published':
-                // Only applies to modified date field
-                if ($date_field === 'post_modified' && $post) {
-                    $timestamp = strtotime($post->post_date);
-                } else {
-                    return $current_date; // No change for published date or if no post object
+    private function get_preview_data($post_ids, $form_data) {
+        $preview_data = array();
+        $batches = array_chunk($post_ids, 50);
+
+        foreach ($batches as $batch) {
+            $posts = $this->get_posts_batch($batch);
+
+            foreach ($batch as $post_id) {
+                if (count($preview_data) >= 10) {
+                    return $preview_data;
                 }
-                break;
-                
-            default:
-                return $current_date; // No change for unsupported methods yet
+
+                if (!isset($posts[$post_id])) {
+                    continue;
+                }
+
+                $resolved = $this->date_resolver->resolve($posts[$post_id], $form_data);
+                $changes = $this->date_resolver->to_preview_row($posts[$post_id], $resolved);
+
+                if ($changes) {
+                    $preview_data[] = $changes;
+                }
+            }
         }
-        
-        // Add offset for modified date (can be 0, positive, or negative)
-        $new_timestamp += ($offset_minutes * MINUTE_IN_SECONDS);
-        
-        return date('Y-m-d H:i:s', $new_timestamp);
+
+        return $preview_data;
     }
     
     /**
-     * Calculate modified date based on new published date
+     * Count how many posts would actually be updated.
      */
-    private function calculate_modified_date_from_published($published_date, $offset_minutes = 0) {
-        $timestamp = strtotime($published_date);
-        
-        // Add offset for modified date (can be 0, positive, or negative)
-        $timestamp += ($offset_minutes * MINUTE_IN_SECONDS);
-        
-        return date('Y-m-d H:i:s', $timestamp);
+    private function count_posts_needing_update($post_ids, $form_data) {
+        $count = 0;
+        $batches = array_chunk($post_ids, 50);
+
+        foreach ($batches as $batch) {
+            $posts = $this->get_posts_batch($batch);
+
+            foreach ($batch as $post_id) {
+                if (!isset($posts[$post_id])) {
+                    continue;
+                }
+
+                $resolved = $this->date_resolver->resolve($posts[$post_id], $form_data);
+                if (!empty($resolved['update_data'])) {
+                    $count++;
+                }
+            }
+        }
+
+        return $count;
     }
     
     /**
      * Generate preview HTML
      */
-    private function generate_preview_html($preview_data, $total_posts, $form_data) {
+    private function generate_preview_html($preview_data, $total_posts, $posts_needing_update, $form_data) {
         if (empty($preview_data)) {
-            return '<p>' . __('No changes to preview.', 'kk-bulk-date-updates') . '</p>';
+            return '<p>' . __('No changes to preview. The matching posts already have the target dates for this update method.', 'kk-bulk-date-updates') . '</p>';
         }
         
         $html = '<div class="kk-preview-results">';
-        $html .= '<h3>' . sprintf(__('Preview: %d posts will be updated', 'kk-bulk-date-updates'), $total_posts) . '</h3>';
+        $html .= '<h3>' . sprintf(__('Preview: %d posts will be updated', 'kk-bulk-date-updates'), $posts_needing_update) . '</h3>';
         
-        if (count($preview_data) < $total_posts) {
-            $html .= '<p><em>' . sprintf(__('Showing first %d posts. All %d matching posts will be updated.', 'kk-bulk-date-updates'), count($preview_data), $total_posts) . '</em></p>';
+        if (count($preview_data) < $posts_needing_update) {
+            $html .= '<p><em>' . sprintf(__('Showing the first %1$d posts that need changes out of %2$d total updates.', 'kk-bulk-date-updates'), count($preview_data), $posts_needing_update) . '</em></p>';
         }
         
         $html .= '<table class="wp-list-table widefat fixed striped">';
@@ -641,55 +609,10 @@ class KK_Bulk_Date_Updates {
                 }
                 
                 $post = $posts[$post_id];
-                $update_data = array();
-                $updated_fields = array();
-                $date_changes = array();
-                $new_published_date = null;
-                $both_dates_selected = in_array('post_date', $form_data['date_fields']) && in_array('post_modified', $form_data['date_fields']);
-                
-                // First pass: handle published date if selected
-                if (in_array('post_date', $form_data['date_fields'])) {
-                    $old_date = $post->post_date;
-                    $new_date = $this->calculate_new_date($old_date, $form_data, 'post_date', 0, $post);
-                    if ($new_date && $new_date !== $old_date) {
-                        $update_data['post_date'] = $new_date;
-                        $update_data['post_date_gmt'] = get_gmt_from_date($new_date);
-                        $updated_fields[] = 'post_date';
-                        $date_changes['post_date'] = array(
-                            'old' => $old_date,
-                            'new' => $new_date
-                        );
-                        $new_published_date = $new_date;
-                    }
-                }
-                
-                // Second pass: handle modified date
-                $should_update_modified = in_array('post_modified', $form_data['date_fields']) || $form_data['update_method'] === 'match_modified_to_published';
-                
-                if ($should_update_modified) {
-                    $old_date = $post->post_modified;
-                    
-                    if ($form_data['update_method'] === 'match_modified_to_published') {
-                        // For "Match Modified to Published", always use published date as base with the specified offset
-                        $new_date = $this->calculate_modified_date_from_published($post->post_date, $form_data['modified_date_offset']);
-                    } elseif ($both_dates_selected && $new_published_date) {
-                        // Use new published date as base for modified date calculation
-                        $new_date = $this->calculate_modified_date_from_published($new_published_date, $form_data['modified_date_offset']);
-                    } else {
-                        // Use current modified date as base
-                        $new_date = $this->calculate_new_date($old_date, $form_data, 'post_modified', $form_data['modified_date_offset'], $post);
-                    }
-                    
-                    if ($new_date && $new_date !== $old_date) {
-                        $update_data['post_modified'] = $new_date;
-                        $update_data['post_modified_gmt'] = get_gmt_from_date($new_date);
-                        $updated_fields[] = 'post_modified';
-                        $date_changes['post_modified'] = array(
-                            'old' => $old_date,
-                            'new' => $new_date
-                        );
-                    }
-                }
+                $resolved = $this->date_resolver->resolve($post, $form_data);
+                $update_data = $resolved['update_data'];
+                $updated_fields = $resolved['updated_fields'];
+                $date_changes = $resolved['date_changes'];
                 
                 // Only update if there are changes
                 if (!empty($update_data)) {
@@ -757,9 +680,10 @@ class KK_Bulk_Date_Updates {
             );
         } else {
             return array(
-                'success' => false,
-                'message' => __('No posts were updated. Please check your settings and try again.', 'kk-bulk-date-updates'),
+                'success' => true,
+                'message' => __('No posts needed updating. The matching posts already have the target dates for this update method.', 'kk-bulk-date-updates'),
                 'data' => array(
+                    'updated_count' => 0,
                     'errors' => $errors,
                     'activity_log' => array()
                 )
@@ -831,14 +755,7 @@ class KK_Bulk_Date_Updates {
      * Temporarily disable WordPress hooks that can slow down bulk operations
      */
     private function disable_post_update_hooks() {
-        // Store original hook state
-        $this->original_hooks = array(
-            'save_post' => has_action('save_post'),
-            'wp_insert_post_data' => has_filter('wp_insert_post_data'),
-            'post_updated' => has_action('post_updated')
-        );
-        
-        // Remove expensive hooks temporarily
+        // Remove expensive hooks temporarily.
         remove_all_actions('save_post');
         remove_all_filters('wp_insert_post_data');
         remove_all_actions('post_updated');
@@ -867,23 +784,6 @@ class KK_Bulk_Date_Updates {
             'post_id' => $post->ID,
             'post_title' => $post->post_title,
             'post_type' => $post->post_type,
-            'updated_fields' => $updated_fields,
-            'date_changes' => $date_changes,
-            'update_method' => $form_data['update_method'],
-            'user_id' => get_current_user_id()
-        );
-    }
-    
-    /**
-     * Create log entry for temporary display (legacy method for backward compatibility)
-     */
-    private function create_log_entry($post_id, $updated_fields, $form_data, $date_changes = array()) {
-        $post = get_post($post_id);
-        return array(
-            'timestamp' => current_time('mysql'),
-            'post_id' => $post_id,
-            'post_title' => $post ? $post->post_title : __('Unknown Post', 'kk-bulk-date-updates'),
-            'post_type' => $post ? $post->post_type : 'unknown',
             'updated_fields' => $updated_fields,
             'date_changes' => $date_changes,
             'update_method' => $form_data['update_method'],

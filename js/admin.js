@@ -98,7 +98,19 @@
          * Submit form via AJAX
          */
         submitForm: function($form, $submitButton) {
+            const $disabledFields = $form.find(':disabled');
+            $disabledFields.prop('disabled', false);
+
             const formData = new FormData($form[0]);
+
+            $disabledFields.prop('disabled', true);
+
+            if ($form.find('#update_method').val() === 'match_modified_to_published') {
+                formData.delete('date_fields[]');
+                formData.append('date_fields[]', 'post_date');
+                formData.append('date_fields[]', 'post_modified');
+                formData.set('modified_date_offset', $form.find('#modified_date_offset').val());
+            }
             
             // Add action and nonce
             formData.append('action', 'kk_bulk_date_updates_action');
@@ -155,38 +167,12 @@
         },
 
         /**
-         * Perform specific action
-         */
-        performAction: function(action, $button) {
-            const data = {
-                action: 'kk_bulk_date_updates_action',
-                nonce: kkBulkDateUpdates.nonce,
-                bulk_action: action
-            };
-            
-            $button.prop('disabled', true);
-            this.showLoading($button);
-            
-            $.ajax({
-                url: kkBulkDateUpdates.ajaxUrl,
-                type: 'POST',
-                data: data,
-                success: this.handleAjaxSuccess.bind(this),
-                error: this.handleAjaxError.bind(this),
-                complete: function() {
-                    $button.prop('disabled', false);
-                    KKBulkDateUpdatesAdmin.hideLoading($button);
-                }
-            });
-        },
-
-        /**
          * Handle AJAX success
          */
         handleAjaxSuccess: function(response) {
             if (response.success) {
-                // Always show message below the form for consistency
-                this.showMessage(response.data.message || kkBulkDateUpdates.strings.success, 'success', true);
+                const successMessage = (response.data && response.data.message) || response.message || kkBulkDateUpdates.strings.success;
+                this.showMessage(successMessage, 'success', true);
                 
                 // Handle preview data
                 if (response.data && response.data.preview_html) {
@@ -430,25 +416,6 @@
                 // Show the "no activity" row if no entries
                 $noActivityRow.show();
             }
-        },
-
-        /**
-         * Utility: Debounce function
-         */
-        debounce: function(func, wait, immediate) {
-            let timeout;
-            return function() {
-                const context = this;
-                const args = arguments;
-                const later = function() {
-                    timeout = null;
-                    if (!immediate) func.apply(context, args);
-                };
-                const callNow = immediate && !timeout;
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-                if (callNow) func.apply(context, args);
-            };
         }
     };
 
