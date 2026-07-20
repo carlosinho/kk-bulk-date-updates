@@ -104,7 +104,7 @@ The repository does not declare a plugin-specific PHP or WordPress minimum versi
 
 Activation currently adds one option:
 
-- `kk_bulk_date_updates_version`
+- `bduk_version`
 
 No database table is created by the active code path.
 
@@ -117,21 +117,22 @@ Admin screen:
 AJAX endpoint:
 
 - `POST wp-admin/admin-ajax.php`
-- `action=kk_bulk_date_updates_action`
+- `action=bduk_bulk_date_updates_action`
 
 Request requirements enforced by the plugin:
 
 - authenticated WordPress admin session
 - capability `manage_options`
-- nonce for `kk_bulk_date_updates_nonce`
+- nonce for `bduk_bulk_date_updates_nonce`
 
 ## Project Structure
 
 ```text
 kk-bulk-date-updates/
 ├── kk-bulk-date-updates.php
+├── uninstall.php
 ├── includes/
-│   ├── class-date-resolver.php
+│   ├── class-bduk-date-resolver.php
 │   └── admin/
 │       └── admin-page.php
 ├── js/
@@ -139,17 +140,18 @@ kk-bulk-date-updates/
 ├── css/
 │   └── admin.css
 └── languages/
-    └── .gitkeep
+    └── kk-bulk-date-updates.pot
 ```
 
 What each file does:
 
 - `kk-bulk-date-updates.php`: plugin bootstrap, admin hooks, AJAX handler, validation, query building, preview generation, batched writes, activation/deactivation
-- `includes/class-date-resolver.php`: shared date calculation for preview and live updates
+- `uninstall.php`: guarded uninstall cleanup for plugin-owned options
+- `includes/class-bduk-date-resolver.php`: shared date calculation for preview and live updates
 - `includes/admin/admin-page.php`: form markup and inline UI behavior for conditional fields
 - `js/admin.js`: AJAX form submission, status messages, preview rendering, activity table rendering
 - `css/admin.css`: admin layout and presentation
-- `languages/.gitkeep`: placeholder only; no translation files are shipped here yet
+- `languages/kk-bulk-date-updates.pot`: generated translation template for WordPress.org packaging
 
 ## Operational Rules That Matter
 

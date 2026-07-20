@@ -1,18 +1,18 @@
 <?php
 /**
  * Admin Page Template
- * 
- * @package KK_Bulk_Date_Updates
+ *
+ * @package BDUK
  * @version 0.1.0
  */
 
-// Prevent direct access
+// Prevent direct access.
 if (!defined('ABSPATH')) {
     exit;
 }
 ?>
 
-<div class="wrap kk-bulk-date-updates-admin">
+<div class="wrap bduk-admin">
     <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
     
     <?php /*
@@ -22,11 +22,11 @@ if (!defined('ABSPATH')) {
     </div>
     */ ?>
 
-    <div class="kk-bulk-date-updates-form">
+    <div class="bduk-form">
         <h2><?php _e('Bulk Date Update Settings', 'kk-bulk-date-updates'); ?></h2>
         
-        <form method="post" action="" class="kk-bulk-date-updates-form">
-            <?php wp_nonce_field('kk_bulk_date_updates_nonce', 'kk_bulk_date_updates_nonce'); ?>
+        <form method="post" action="" class="bduk-form">
+            <?php wp_nonce_field('bduk_bulk_date_updates_nonce', 'bduk_bulk_date_updates_nonce'); ?>
             
             <table class="form-table">
                 <tbody>
@@ -64,7 +64,7 @@ if (!defined('ABSPATH')) {
                             <p class="description"><?php _e('Filter which content to include in the bulk update.', 'kk-bulk-date-updates'); ?></p>
                             
                             <!-- Date Range Filter -->
-                            <div id="filter_date_range_options" class="kk-filter-options" style="display: none; margin-top: 10px;">
+                            <div id="filter_date_range_options" class="bduk-filter-options" style="display: none; margin-top: 10px;">
                                 <label><?php _e('Published between:', 'kk-bulk-date-updates'); ?></label><br>
                                 <input type="date" name="filter_date_start" id="filter_date_start" class="regular-text">
                                 <span><?php _e('and', 'kk-bulk-date-updates'); ?></span>
@@ -73,7 +73,7 @@ if (!defined('ABSPATH')) {
                             </div>
                             
                             <!-- Count Limit Filter -->
-                            <div id="filter_count_limit_options" class="kk-filter-options" style="display: none; margin-top: 10px;">
+                            <div id="filter_count_limit_options" class="bduk-filter-options" style="display: none; margin-top: 10px;">
                                 <label><?php _e('Update only:', 'kk-bulk-date-updates'); ?></label><br>
                                 <input type="number" name="filter_count" id="filter_count" min="1" max="1000" value="10" class="small-text">
                                 <label>
@@ -86,10 +86,10 @@ if (!defined('ABSPATH')) {
                             </div>
                             
                             <!-- Category/Tag Filter -->
-                            <div id="filter_category_tag_options" class="kk-filter-options" style="display: none; margin-top: 10px;">
-                                <div id="kk-taxonomy-selectors">
+                            <div id="filter_category_tag_options" class="bduk-filter-options" style="display: none; margin-top: 10px;">
+                                <div id="bduk-taxonomy-selectors">
                                     <!-- Categories (for posts) -->
-                                    <div class="kk-taxonomy-group" data-post-type="post">
+                                    <div class="bduk-taxonomy-group" data-post-type="post">
                                         <label><?php _e('Categories:', 'kk-bulk-date-updates'); ?></label><br>
                                         <select name="filter_categories[]" id="filter_categories" multiple size="4" style="min-width: 300px;">
                                             <?php
@@ -101,7 +101,7 @@ if (!defined('ABSPATH')) {
                                         </select>
                                     </div>
                                     
-                                    <div class="kk-taxonomy-group" data-post-type="post" style="margin-top: 10px;">
+                                    <div class="bduk-taxonomy-group" data-post-type="post" style="margin-top: 10px;">
                                         <label><?php _e('Tags:', 'kk-bulk-date-updates'); ?></label><br>
                                         <select name="filter_tags[]" id="filter_tags" multiple size="4" style="min-width: 300px;">
                                             <?php
@@ -114,7 +114,7 @@ if (!defined('ABSPATH')) {
                                     </div>
                                     
                                     <!-- Pages (no categories/tags by default) -->
-                                    <div class="kk-taxonomy-group" data-post-type="page" style="display: none;">
+                                    <div class="bduk-taxonomy-group" data-post-type="page" style="display: none;">
                                         <p><em><?php _e('Pages do not have categories or tags by default.', 'kk-bulk-date-updates'); ?></em></p>
                                     </div>
                                 </div>
@@ -128,7 +128,7 @@ if (!defined('ABSPATH')) {
                             <label><?php _e('Date Fields', 'kk-bulk-date-updates'); ?></label>
                         </th>
                         <td>
-                            <div class="kk-date-fields-container">
+                            <div class="bduk-date-fields-container">
                                 <label>
                                     <input type="checkbox" name="date_fields[]" value="post_date" id="date_field_published" checked>
                                     <?php _e('Published Date', 'kk-bulk-date-updates'); ?>
@@ -137,7 +137,7 @@ if (!defined('ABSPATH')) {
                                 <label>
                                     <input type="checkbox" name="date_fields[]" value="post_modified" id="date_field_modified">
                                     <?php _e('Modified Date', 'kk-bulk-date-updates'); ?>
-                                    <span class="kk-modified-date-offset">
+                                    <span class="bduk-modified-date-offset">
                                         <?php _e('with', 'kk-bulk-date-updates'); ?>
                                         <input type="number" name="modified_date_offset" id="modified_date_offset" min="0" max="1440" value="5" class="small-text">
                                         <?php _e('minutes offset', 'kk-bulk-date-updates'); ?>
@@ -146,7 +146,7 @@ if (!defined('ABSPATH')) {
                             </div>
                             
                             <p class="description"><?php _e('Select which date fields to update.', 'kk-bulk-date-updates'); ?></p>
-                            <p class="description kk-match-method-note" style="display: none; color: #0073aa; font-style: italic;"><?php _e('Both date fields are automatically selected and locked when using "Match Modified to Published" method.', 'kk-bulk-date-updates'); ?></p>
+                            <p class="description bduk-match-method-note" style="display: none; color: #0073aa; font-style: italic;"><?php _e('Both date fields are automatically selected and locked when using "Match Modified to Published" method.', 'kk-bulk-date-updates'); ?></p>
                         </td>
                     </tr>
                     
@@ -224,25 +224,25 @@ if (!defined('ABSPATH')) {
                 </tbody>
             </table>
             
-            <div class="kk-bulk-date-updates-progress" style="display: none;">
-                <div class="kk-bulk-date-updates-progress-bar">
-                    <div class="kk-bulk-date-updates-progress-fill"></div>
+            <div class="bduk-progress" style="display: none;">
+                <div class="bduk-progress-bar">
+                    <div class="bduk-progress-fill"></div>
                 </div>
             </div>
             
             <p class="submit">
-                <input type="submit" name="submit" id="submit" class="button button-primary kk-bulk-date-updates-button" value="<?php _e('Preview Changes', 'kk-bulk-date-updates'); ?>">
-                <button type="button" class="button kk-reset-button"><?php _e('Reset Form', 'kk-bulk-date-updates'); ?></button>
+                <input type="submit" name="submit" id="submit" class="button button-primary bduk-button" value="<?php _e('Preview Changes', 'kk-bulk-date-updates'); ?>">
+                <button type="button" class="button bduk-reset-button"><?php _e('Reset Form', 'kk-bulk-date-updates'); ?></button>
             </p>
         </form>
     </div>
     
-    <div class="kk-bulk-date-updates-form" id="kk-recent-activity-section">
+    <div class="bduk-form" id="bduk-recent-activity-section">
         <h2><?php _e('Recent Activity', 'kk-bulk-date-updates'); ?></h2>
         <?php /* <p><?php _e('Recent bulk date update operations will be displayed here after each operation.', 'kk-bulk-date-updates'); ?></p> */ ?>
         
-        <div id="kk-activity-log-container">
-            <table class="wp-list-table widefat striped" id="kk-activity-log-table">
+        <div id="bduk-activity-log-container">
+            <table class="wp-list-table widefat striped" id="bduk-activity-log-table">
                 <thead>
                     <tr>
                         <th><?php _e('Post', 'kk-bulk-date-updates'); ?></th>
@@ -250,8 +250,8 @@ if (!defined('ABSPATH')) {
                         <th><?php _e('Method', 'kk-bulk-date-updates'); ?></th>
                     </tr>
                 </thead>
-                <tbody id="kk-activity-log-tbody">
-                    <tr id="kk-no-activity-row">
+                <tbody id="bduk-activity-log-tbody">
+                    <tr id="bduk-no-activity-row">
                         <td colspan="3"><?php _e('No recent activity. Perform a bulk update operation to see results here.', 'kk-bulk-date-updates'); ?></td>
                     </tr>
                 </tbody>
@@ -284,14 +284,14 @@ jQuery(document).ready(function($) {
             $offsetField.closest('span').show();
             
             // Show explanatory note
-            $('.kk-match-method-note').show();
+            $('.bduk-match-method-note').show();
         } else {
             // Re-enable checkboxes for other methods
             $publishedCheckbox.prop('disabled', false);
             $modifiedCheckbox.prop('disabled', false);
             
             // Hide explanatory note
-            $('.kk-match-method-note').hide();
+            $('.bduk-match-method-note').hide();
             
             // Trigger the modified date checkbox change to handle offset field visibility
             toggleModifiedDateOffset();
@@ -365,7 +365,7 @@ jQuery(document).ready(function($) {
         const filterType = $(this).val();
         
         // Hide all filter options
-        $('.kk-filter-options').hide();
+        $('.bduk-filter-options').hide();
         
         // Show relevant filter options
         switch(filterType) {
@@ -393,17 +393,17 @@ jQuery(document).ready(function($) {
         }).get();
         
         // Hide all taxonomy groups
-        $('.kk-taxonomy-group').hide();
+        $('.bduk-taxonomy-group').hide();
         
         // Show taxonomy groups for selected post types
         selectedPostTypes.forEach(function(postType) {
-            $('.kk-taxonomy-group[data-post-type="' + postType + '"]').show();
+            $('.bduk-taxonomy-group[data-post-type="' + postType + '"]').show();
         });
         
         // If no post types are selected or only non-post types, show a message
         if (selectedPostTypes.length === 0 || (selectedPostTypes.length === 1 && !selectedPostTypes.includes('post'))) {
             if (selectedPostTypes.includes('page') && selectedPostTypes.length === 1) {
-                $('.kk-taxonomy-group[data-post-type="page"]').show();
+                $('.bduk-taxonomy-group[data-post-type="page"]').show();
             }
         }
     }

@@ -2,7 +2,7 @@
 /**
  * Shared date resolution for preview and live bulk updates.
  *
- * @package KK_Bulk_Date_Updates
+ * @package BDUK
  */
 
 // Prevent direct access.
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Resolves post date changes from form data for preview and live updates.
  */
-class KK_Bulk_Date_Updates_Date_Resolver {
+class BDUK_Date_Resolver {
 
 	/**
 	 * Resolve date changes for a single post.
@@ -151,7 +151,7 @@ class KK_Bulk_Date_Updates_Date_Resolver {
 
 			case 'match_modified_to_published':
 				if ( 'post_modified' === $date_field && $post ) {
-					$timestamp = strtotime( $post->post_date );
+					$timestamp     = strtotime( $post->post_date );
 					$new_timestamp = $timestamp;
 				} else {
 					return $current_date;

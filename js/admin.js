@@ -1,7 +1,7 @@
 /**
- * KK Bulk Date Updates - Admin JavaScript
- * 
- * @package KK_Bulk_Date_Updates
+ * Bulk Date Updates - Admin JavaScript
+ *
+ * @package BDUK
  * @version 0.1.0
  */
 
@@ -11,7 +11,7 @@
     /**
      * Admin functionality object
      */
-    const KKBulkDateUpdatesAdmin = {
+    const BDUKAdmin = {
         
         /**
          * Initialize admin functionality
@@ -26,13 +26,13 @@
          */
         bindEvents: function() {
             // Form submission - prevent any form submission
-            $(document).on('submit', '.kk-bulk-date-updates-form', this.handleFormSubmit.bind(this));
+            $(document).on('submit', '.bduk-form', this.handleFormSubmit.bind(this));
             
             // Submit button clicks - handle before form submission
-            $(document).on('click', '.kk-bulk-date-updates-button', this.handleSubmitClick.bind(this));
+            $(document).on('click', '.bduk-button', this.handleSubmitClick.bind(this));
             
             // Reset functionality
-            $(document).on('click', '.kk-reset-button', this.handleReset.bind(this));
+            $(document).on('click', '.bduk-reset-button', this.handleReset.bind(this));
         },
 
         /**
@@ -41,7 +41,7 @@
         initComponents: function() {
             // Initialize date pickers if available
             if ($.fn.datepicker) {
-                $('.kk-date-picker').datepicker({
+                $('.bduk-date-picker').datepicker({
                     dateFormat: 'yy-mm-dd',
                     changeMonth: true,
                     changeYear: true
@@ -113,8 +113,8 @@
             }
             
             // Add action and nonce
-            formData.append('action', 'kk_bulk_date_updates_action');
-            formData.append('nonce', kkBulkDateUpdates.nonce);
+            formData.append('action', 'bduk_bulk_date_updates_action');
+            formData.append('nonce', bdukAdmin.nonce);
             
             // Disable submit button and show loading
             $submitButton.prop('disabled', true);
@@ -129,7 +129,7 @@
             
             // Make AJAX request
             $.ajax({
-                url: kkBulkDateUpdates.ajaxUrl,
+                url: bdukAdmin.ajaxUrl,
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -154,7 +154,7 @@
         handleReset: function(e) {
             e.preventDefault();
             
-            if (confirm(kkBulkDateUpdates.strings.confirmReset || 'Are you sure you want to reset all fields?')) {
+            if (confirm(bdukAdmin.strings.confirmReset)) {
                 const $form = $(e.target).closest('form');
                 $form[0].reset();
                 this.clearMessages();
@@ -171,7 +171,7 @@
          */
         handleAjaxSuccess: function(response) {
             if (response.success) {
-                const successMessage = (response.data && response.data.message) || response.message || kkBulkDateUpdates.strings.success;
+                const successMessage = (response.data && response.data.message) || response.message || bdukAdmin.strings.success;
                 this.showMessage(successMessage, 'success', true);
                 
                 // Handle preview data
@@ -199,7 +199,7 @@
                 }
             } else {
                 // Show error messages below form as well - handle both data.message and direct message
-                const errorMessage = (response.data && response.data.message) || response.message || kkBulkDateUpdates.strings.error;
+                const errorMessage = (response.data && response.data.message) || response.message || bdukAdmin.strings.error;
                 this.showMessage(errorMessage, 'error', true);
             }
         },
@@ -210,7 +210,7 @@
         handleAjaxError: function(xhr, status, error) {
             console.error('AJAX Error:', status, error, xhr.responseText);
             
-            let errorMessage = kkBulkDateUpdates.strings.error;
+            let errorMessage = bdukAdmin.strings.error;
             
             // Try to get more specific error message
             if (xhr.responseText) {
@@ -224,11 +224,11 @@
                 } catch (e) {
                     // If parsing fails, check for common HTTP errors
                     if (xhr.status === 403) {
-                        errorMessage = 'Permission denied. Please refresh the page and try again.';
+                        errorMessage = bdukAdmin.strings.permissionDenied;
                     } else if (xhr.status === 500) {
-                        errorMessage = 'Server error occurred. Please try again.';
+                        errorMessage = bdukAdmin.strings.serverError;
                     } else if (xhr.status === 0) {
-                        errorMessage = 'Network connection error. Please check your connection and try again.';
+                        errorMessage = bdukAdmin.strings.networkError;
                     }
                 }
             }
@@ -242,7 +242,7 @@
         showLoading: function($element) {
             const originalText = $element.text();
             $element.data('original-text', originalText);
-            $element.html('<span class="kk-bulk-date-updates-spinner"></span>' + kkBulkDateUpdates.strings.processing);
+            $element.html('<span class="bduk-spinner"></span>' + bdukAdmin.strings.processing);
         },
 
         /**
@@ -259,23 +259,23 @@
          * Show message
          */
         showMessage: function(message, type, belowForm) {
-            const $message = $('<div class="kk-bulk-date-updates-message ' + type + '">' + message + '</div>');
+            const $message = $('<div class="bduk-message ' + type + '">' + message + '</div>');
             
             // Remove existing messages
             this.clearMessages();
             
             if (belowForm) {
                 // Insert message below the form (after submit buttons)
-                const $submitSection = $('.kk-bulk-date-updates-form .submit');
+                const $submitSection = $('.bduk-form .submit');
                 if ($submitSection.length) {
                     $submitSection.after($message);
                 } else {
                     // Fallback: after the form
-                    $('.kk-bulk-date-updates-form').first().after($message);
+                    $('.bduk-form').first().after($message);
                 }
             } else {
                 // Insert at top of container (fallback behavior)
-                const $container = $('.kk-bulk-date-updates-admin');
+                const $container = $('.bduk-admin');
                 $container.prepend($message);
                 
                 // Scroll to message only for top placement
@@ -296,22 +296,22 @@
          * Clear messages
          */
         clearMessages: function() {
-            $('.kk-bulk-date-updates-message').remove();
+            $('.bduk-message').remove();
         },
 
         /**
          * Clear preview
          */
         clearPreview: function() {
-            $('.kk-preview-container').remove();
+            $('.bduk-preview-container').remove();
         },
 
         /**
          * Update progress bar
          */
         updateProgress: function(progress) {
-            const $progressContainer = $('.kk-bulk-date-updates-progress');
-            const $progressFill = $('.kk-bulk-date-updates-progress-fill');
+            const $progressContainer = $('.bduk-progress');
+            const $progressFill = $('.bduk-progress-fill');
             
             if ($progressContainer.length === 0) {
                 return;
@@ -332,14 +332,14 @@
          */
         displayPreview: function(previewHtml) {
             // Remove any existing preview
-            $('.kk-preview-container').remove();
+            $('.bduk-preview-container').remove();
             
             // Create preview container
-            const $previewContainer = $('<div class="kk-preview-container"></div>');
+            const $previewContainer = $('<div class="bduk-preview-container"></div>');
             $previewContainer.html(previewHtml);
             
             // Insert after the form
-            $('.kk-bulk-date-updates-form').first().after($previewContainer);
+            $('.bduk-form').first().after($previewContainer);
             
             // Smooth scroll to preview (with a slight delay to avoid conflicts)
             setTimeout(function() {
@@ -353,15 +353,15 @@
          * Display activity log
          */
         displayActivityLog: function(activityLog) {
-            const $tbody = $('#kk-activity-log-tbody');
-            const $noActivityRow = $('#kk-no-activity-row');
+            const $tbody = $('#bduk-activity-log-tbody');
+            const $noActivityRow = $('#bduk-no-activity-row');
             
             if (!$tbody.length) {
                 return;
             }
             
             // Clear existing rows except the "no activity" row
-            $tbody.find('tr:not(#kk-no-activity-row)').remove();
+            $tbody.find('tr:not(#bduk-no-activity-row)').remove();
             
             if (activityLog && activityLog.length > 0) {
                 // Hide the "no activity" row
@@ -378,27 +378,27 @@
                         
                         if (entry.date_changes.post_date) {
                             const change = entry.date_changes.post_date;
-                            changes.push('<div class="date-change"><strong>Published:</strong><br>' + change.old + ' → ' + change.new + '</div>');
+                            changes.push('<div class="date-change"><strong>' + bdukAdmin.strings.publishedLabel + '</strong><br>' + change.old + ' → ' + change.new + '</div>');
                         }
                         
                         if (entry.date_changes.post_modified) {
                             const change = entry.date_changes.post_modified;
-                            changes.push('<div class="date-change"><strong>Modified:</strong><br>' + change.old + ' → ' + change.new + '</div>');
+                            changes.push('<div class="date-change"><strong>' + bdukAdmin.strings.modifiedLabel + '</strong><br>' + change.old + ' → ' + change.new + '</div>');
                         }
                         
                         fieldsHtml = changes.join('');
                     } else {
                         // Fallback to simple field names if no date changes available
                         fieldsHtml = entry.updated_fields.map(function(field) {
-                            return field === 'post_date' ? 'Published Date' : 'Modified Date';
+                            return field === 'post_date' ? bdukAdmin.strings.publishedDateLabel : bdukAdmin.strings.modifiedDateLabel;
                         }).join(', ');
                     }
                     
                     // Format update method
-                    const methodText = entry.update_method.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    const methodText = bdukAdmin.strings.updateMethods[entry.update_method] || entry.update_method;
                     
                     $row.html(
-                        '<td><strong>' + entry.post_title + '</strong><br><small>ID: ' + entry.post_id + ' (' + entry.post_type + ')</small></td>' +
+                        '<td><strong>' + entry.post_title + '</strong><br><small>' + bdukAdmin.strings.idLabel + ' ' + entry.post_id + ' (' + entry.post_type + ')</small></td>' +
                         '<td>' + fieldsHtml + '</td>' +
                         '<td>' + methodText + '</td>'
                     );
@@ -409,7 +409,7 @@
                 // Scroll to activity log section
                 setTimeout(function() {
                     $('html, body').animate({
-                        scrollTop: $('#kk-recent-activity-section').offset().top - 20
+                        scrollTop: $('#bduk-recent-activity-section').offset().top - 20
                     }, 400);
                 }, 100);
             } else {
@@ -423,10 +423,10 @@
      * Initialize when document is ready
      */
     $(document).ready(function() {
-        KKBulkDateUpdatesAdmin.init();
+        BDUKAdmin.init();
     });
 
     // Make object globally available
-    window.KKBulkDateUpdatesAdmin = KKBulkDateUpdatesAdmin;
+    window.BDUKAdmin = BDUKAdmin;
 
 })(jQuery); 

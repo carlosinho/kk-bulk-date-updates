@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Bulk Date Updates by KK
  * Description: A WordPress plugin for bulk updating dates across posts and pages.
- * Version: 0.20
+ * Version: 0.21
  * Author: Karol K
  * Author URI: https://wpwork.shop/
  * License: GPL v2 or later
@@ -10,42 +10,43 @@
  * Domain Path: /languages
  */
 
-// Prevent direct access
+// Prevent direct access.
 if (!defined('ABSPATH')) {
     exit;
 }
 
-// Define plugin constants
-define('KK_BULK_DATE_UPDATES_VERSION', '0.20');
-define('KK_BULK_DATE_UPDATES_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('KK_BULK_DATE_UPDATES_PLUGIN_PATH', plugin_dir_path(__FILE__));
-define('KK_BULK_DATE_UPDATES_PLUGIN_BASENAME', plugin_basename(__FILE__));
+// Define plugin constants.
+define('BDUK_VERSION', '0.21');
+define('BDUK_PLUGIN_FILE', __FILE__);
+define('BDUK_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('BDUK_PLUGIN_PATH', plugin_dir_path(__FILE__));
+define('BDUK_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
-require_once KK_BULK_DATE_UPDATES_PLUGIN_PATH . 'includes/class-date-resolver.php';
+require_once BDUK_PLUGIN_PATH . 'includes/class-bduk-date-resolver.php';
 
 /**
  * Main plugin class
  */
-class KK_Bulk_Date_Updates {
+class BDUK_Plugin {
     
     /**
      * Plugin instance
      *
-     * @var KK_Bulk_Date_Updates
+     * @var BDUK_Plugin
      */
     private static $instance = null;
     
     /**
      * Date resolver for preview and live updates.
      *
-     * @var KK_Bulk_Date_Updates_Date_Resolver
+     * @var BDUK_Date_Resolver
      */
     private $date_resolver;
     
     /**
      * Get plugin instance
      *
-     * @return KK_Bulk_Date_Updates
+     * @return BDUK_Plugin
      */
     public static function get_instance() {
         if (null === self::$instance) {
@@ -58,7 +59,7 @@ class KK_Bulk_Date_Updates {
      * Constructor
      */
     private function __construct() {
-        $this->date_resolver = new KK_Bulk_Date_Updates_Date_Resolver();
+        $this->date_resolver = new BDUK_Date_Resolver();
         $this->init_hooks();
     }
     
@@ -70,9 +71,8 @@ class KK_Bulk_Date_Updates {
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
         
         // Plugin lifecycle hooks
-        register_activation_hook(__FILE__, array($this, 'activate'));
-        register_deactivation_hook(__FILE__, array($this, 'deactivate'));
-        register_uninstall_hook(__FILE__, array('KK_Bulk_Date_Updates', 'uninstall'));
+        register_activation_hook(BDUK_PLUGIN_FILE, array($this, 'activate'));
+        register_deactivation_hook(BDUK_PLUGIN_FILE, array($this, 'deactivate'));
     }
     
     /**
@@ -83,7 +83,7 @@ class KK_Bulk_Date_Updates {
         load_plugin_textdomain(
             'kk-bulk-date-updates',
             false,
-            dirname(KK_BULK_DATE_UPDATES_PLUGIN_BASENAME) . '/languages'
+            dirname(BDUK_PLUGIN_BASENAME) . '/languages'
         );
         
         // Initialize admin functionality
@@ -100,7 +100,7 @@ class KK_Bulk_Date_Updates {
         add_action('admin_menu', array($this, 'add_admin_menu'));
         
         // Add AJAX handlers
-        add_action('wp_ajax_kk_bulk_date_updates_action', array($this, 'handle_ajax_request'));
+        add_action('wp_ajax_bduk_bulk_date_updates_action', array($this, 'handle_ajax_request'));
     }
     
     /**
@@ -120,7 +120,7 @@ class KK_Bulk_Date_Updates {
      * Admin page callback
      */
     public function admin_page_callback() {
-        include_once KK_BULK_DATE_UPDATES_PLUGIN_PATH . 'includes/admin/admin-page.php';
+        include_once BDUK_PLUGIN_PATH . 'includes/admin/admin-page.php';
     }
     
     /**
@@ -128,7 +128,9 @@ class KK_Bulk_Date_Updates {
      */
     public function handle_ajax_request() {
         // Verify nonce
-        if (!wp_verify_nonce($_POST['nonce'], 'kk_bulk_date_updates_nonce')) {
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
+
+        if (!wp_verify_nonce($nonce, 'bduk_bulk_date_updates_nonce')) {
             wp_die(__('Security check failed', 'kk-bulk-date-updates'));
         }
         
@@ -532,7 +534,7 @@ class KK_Bulk_Date_Updates {
             return '<p>' . __('No changes to preview. The matching posts already have the target dates for this update method.', 'kk-bulk-date-updates') . '</p>';
         }
         
-        $html = '<div class="kk-preview-results">';
+        $html = '<div class="bduk-preview-results">';
         $html .= '<h3>' . sprintf(__('Preview: %d posts will be updated', 'kk-bulk-date-updates'), $posts_needing_update) . '</h3>';
         
         if (count($preview_data) < $posts_needing_update) {
@@ -548,7 +550,7 @@ class KK_Bulk_Date_Updates {
         
         foreach ($preview_data as $change) {
             $html .= '<tr>';
-            $html .= '<td><strong>' . esc_html($change['post_title']) . '</strong><br><small>ID: ' . $change['post_id'] . ' (' . $change['post_type'] . ')</small></td>';
+            $html .= '<td><strong>' . esc_html($change['post_title']) . '</strong><br><small>' . esc_html__( 'ID:', 'kk-bulk-date-updates' ) . ' ' . $change['post_id'] . ' (' . $change['post_type'] . ')</small></td>';
             
             // Current dates
             $html .= '<td>';
@@ -801,31 +803,47 @@ class KK_Bulk_Date_Updates {
         }
         
         wp_enqueue_style(
-            'kk-bulk-date-updates-admin',
-            KK_BULK_DATE_UPDATES_PLUGIN_URL . 'css/admin.css',
+            'bduk-admin',
+            BDUK_PLUGIN_URL . 'css/admin.css',
             array(),
-            KK_BULK_DATE_UPDATES_VERSION
+            BDUK_VERSION
         );
         
         wp_enqueue_script(
-            'kk-bulk-date-updates-admin',
-            KK_BULK_DATE_UPDATES_PLUGIN_URL . 'js/admin.js',
+            'bduk-admin',
+            BDUK_PLUGIN_URL . 'js/admin.js',
             array('jquery'),
-            KK_BULK_DATE_UPDATES_VERSION,
+            BDUK_VERSION,
             true
         );
         
         // Localize script for AJAX
         wp_localize_script(
-            'kk-bulk-date-updates-admin',
-            'kkBulkDateUpdates',
+            'bduk-admin',
+            'bdukAdmin',
             array(
                 'ajaxUrl' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('kk_bulk_date_updates_nonce'),
+                'nonce' => wp_create_nonce('bduk_bulk_date_updates_nonce'),
                 'strings' => array(
                     'processing' => __('Processing...', 'kk-bulk-date-updates'),
                     'error' => __('An error occurred', 'kk-bulk-date-updates'),
-                    'success' => __('Operation completed successfully', 'kk-bulk-date-updates')
+                    'success' => __('Operation completed successfully', 'kk-bulk-date-updates'),
+                    'confirmReset' => __('Are you sure you want to reset all fields?', 'kk-bulk-date-updates'),
+                    'permissionDenied' => __('Permission denied. Please refresh the page and try again.', 'kk-bulk-date-updates'),
+                    'serverError' => __('Server error occurred. Please try again.', 'kk-bulk-date-updates'),
+                    'networkError' => __('Network connection error. Please check your connection and try again.', 'kk-bulk-date-updates'),
+                    'idLabel' => __('ID:', 'kk-bulk-date-updates'),
+                    'publishedLabel' => __('Published:', 'kk-bulk-date-updates'),
+                    'modifiedLabel' => __('Modified:', 'kk-bulk-date-updates'),
+                    'publishedDateLabel' => __('Published Date', 'kk-bulk-date-updates'),
+                    'modifiedDateLabel' => __('Modified Date', 'kk-bulk-date-updates'),
+                    'updateMethods' => array(
+                        'add_days' => __('Add Days', 'kk-bulk-date-updates'),
+                        'subtract_days' => __('Subtract Days', 'kk-bulk-date-updates'),
+                        'match_modified_to_published' => __('Match Modified to Published', 'kk-bulk-date-updates'),
+                        'specific_date' => __('Set Specific Date (TBA)', 'kk-bulk-date-updates'),
+                        'random_range' => __('Random Date Range (TBA)', 'kk-bulk-date-updates'),
+                    ),
                 )
             )
         );
@@ -835,11 +853,8 @@ class KK_Bulk_Date_Updates {
      * Plugin activation
      */
     public function activate() {
-        // Create database tables if needed
-        $this->create_tables();
-        
         // Set default options
-        add_option('kk_bulk_date_updates_version', KK_BULK_DATE_UPDATES_VERSION);
+        add_option('bduk_version', BDUK_VERSION);
         
         // Note: flush_rewrite_rules() removed - not needed for date update plugin
     }
@@ -848,22 +863,7 @@ class KK_Bulk_Date_Updates {
      * Plugin deactivation
      */
     public function deactivate() {
-        // Clean up scheduled events
-        wp_clear_scheduled_hook('kk_bulk_date_updates_cron');
-        
-        // Note: flush_rewrite_rules() removed - not needed for date update plugin
-    }
-    
-    /**
-     * Plugin uninstall
-     */
-    public static function uninstall() {
-        // Remove options
-        delete_option('kk_bulk_date_updates_version');
-        delete_option('kk_bulk_date_updates_logs'); // Clean up old logs if they exist
-        
-        // Remove database tables if needed
-        // self::drop_tables();
+        // No deactivation cleanup is currently required.
     }
     
     /**
@@ -886,40 +886,12 @@ class KK_Bulk_Date_Updates {
         return $memory_limit;
     }
     
-    /**
-     * Create database tables
-     */
-    private function create_tables() {
-        global $wpdb;
-        
-        $charset_collate = $wpdb->get_charset_collate();
-        
-        // Example table creation (uncomment if needed)
-        /*
-        $table_name = $wpdb->prefix . 'kk_bulk_date_updates_log';
-        
-        $sql = "CREATE TABLE $table_name (
-            id mediumint(9) NOT NULL AUTO_INCREMENT,
-            post_id bigint(20) NOT NULL,
-            old_date datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-            new_date datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-            updated_by bigint(20) NOT NULL,
-            updated_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            PRIMARY KEY (id),
-            KEY post_id (post_id),
-            KEY updated_by (updated_by)
-        ) $charset_collate;";
-        
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta($sql);
-        */
-    }
 }
 
-// Initialize the plugin
-function kk_bulk_date_updates_init() {
-    return KK_Bulk_Date_Updates::get_instance();
+// Initialize the plugin.
+function bduk_init() {
+    return BDUK_Plugin::get_instance();
 }
 
-// Start the plugin
-add_action('plugins_loaded', 'kk_bulk_date_updates_init'); 
+// Start the plugin.
+add_action('plugins_loaded', 'bduk_init');

@@ -12,7 +12,7 @@ The plugin is usable as an admin-only bulk date maintenance tool for published W
 
 - [x] WordPress plugin bootstrap in `kk-bulk-date-updates.php`
 - [x] Admin screen added under `Tools -> Bulk Date Updates`
-- [x] AJAX submission flow through `wp-admin/admin-ajax.php` with `action=kk_bulk_date_updates_action`
+- [x] AJAX submission flow through `wp-admin/admin-ajax.php` with `action=bduk_bulk_date_updates_action`
 - [x] Nonce verification and `manage_options` capability checks
 - [x] Bulk update support for `post_date` and `post_modified`
 - [x] Implemented update methods:
@@ -61,10 +61,9 @@ The plugin is usable as an admin-only bulk date maintenance tool for published W
 ### v0.20 — Tightening
 
 - [x] Potential refactor.
-  - Should we refactor and improve after the originally written code, which is from last year? Can any of the plugin functionality be implemented in a more efficient way? I'm not looking for changes for the sake of them or fixing security issues that are purely hypothetical 
-    and will never happen. I'm looking for actual sub-par execution/implementation.
+  - Should we refactor and improve after the originally written code, which is from last year? Can any of the plugin functionality be implemented in a more efficient way? I'm not looking for changes for the sake of them or fixing security issues that are purely hypothetical and will never happen. I'm looking for actual sub-par execution/implementation.
   - Done:
-    - [x] Extract shared date resolution into `includes/class-date-resolver.php`
+    - [x] Extract shared date resolution into `includes/class-bduk-date-resolver.php`
     - [x] DRY preview and live update paths through the resolver
     - [x] Batch-fetch preview posts instead of per-post `get_post()` calls
     - [x] Normalize AJAX responses with `wp_send_json_success()` / `wp_send_json_error()`
@@ -99,7 +98,7 @@ The plugin is usable as an admin-only bulk date maintenance tool for published W
 - During a live run, the plugin removes all callbacks from `save_post`, `wp_insert_post_data`, and `post_updated` for the rest of the request and does not restore them within that request
 - `modified_date_offset` is sanitized with `absint()`, so negative offsets are not actually supported by the current implementation
 - There are no automated tests, no CI config, and no dedicated WordPress test harness
-- Most server-side logic is concentrated in `KK_Bulk_Date_Updates`, which keeps the plugin simple now but will make further growth harder to manage
+- Most server-side logic is concentrated in `BDUK_Plugin`, which keeps the plugin simple now but will make further growth harder to manage
 
 ## Decisions Pending
 

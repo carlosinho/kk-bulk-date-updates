@@ -11,7 +11,7 @@ The plugin is a small admin-only WordPress plugin with one main orchestration cl
 Runtime entry points:
 
 - plugin bootstrap file: `kk-bulk-date-updates.php`
-- date resolver: `includes/class-date-resolver.php`
+- date resolver: `includes/class-bduk-date-resolver.php`
 - admin page view: `includes/admin/admin-page.php`
 - AJAX client: `js/admin.js`
 
@@ -38,8 +38,8 @@ That philosophy explains most of the architecture:
 Initialization flow:
 
 1. WordPress loads `kk-bulk-date-updates.php`.
-2. `plugins_loaded` calls `kk_bulk_date_updates_init()`.
-3. `KK_Bulk_Date_Updates::get_instance()` constructs the singleton.
+2. `plugins_loaded` calls `bduk_init()`.
+3. `BDUK_Plugin::get_instance()` constructs the singleton.
 4. `init_hooks()` registers:
    - `init`
    - `admin_enqueue_scripts`
@@ -48,9 +48,9 @@ Initialization flow:
 
 Lifecycle behavior:
 
-- `activate()` adds `kk_bulk_date_updates_version`
-- `deactivate()` clears the cron hook name `kk_bulk_date_updates_cron`
-- `uninstall()` deletes `kk_bulk_date_updates_version` and legacy option `kk_bulk_date_updates_logs`
+- `activate()` adds `bduk_version`
+- `deactivate()` currently performs no cleanup
+- `uninstall.php` deletes `bduk_version`
 
 Important exception:
 
@@ -58,7 +58,7 @@ Important exception:
 
 ## Main Components
 
-### `KK_Bulk_Date_Updates`
+### `BDUK_Plugin`
 
 Core server-side orchestration in one class:
 
@@ -70,7 +70,7 @@ Core server-side orchestration in one class:
 - batched update execution
 - activation/deactivation helpers
 
-Date calculation is delegated to `KK_Bulk_Date_Updates_Date_Resolver` in `includes/class-date-resolver.php`.
+Date calculation is delegated to `BDUK_Date_Resolver` in `includes/class-bduk-date-resolver.php`.
 
 ### `includes/admin/admin-page.php`
 
@@ -131,7 +131,7 @@ Important implementation caveats:
 
 1. `js/admin.js` serializes the form with `FormData`.
 2. It appends:
-   - `action=kk_bulk_date_updates_action`
+   - `action=bduk_bulk_date_updates_action`
    - `nonce=<localized nonce>`
 3. WordPress routes the request to `handle_ajax_request()`.
 4. The handler verifies nonce and capability.
@@ -169,7 +169,7 @@ Taxonomy rule worth noting:
 `generate_preview()`:
 
 - batch-fetches matched posts for the first 10 IDs via `get_posts_batch()`
-- uses `KK_Bulk_Date_Updates_Date_Resolver` to build old/new values
+- uses `BDUK_Date_Resolver` to build old/new values
 - returns pre-rendered HTML
 
 Preview is intentionally not a full export of all affected rows.
@@ -210,8 +210,7 @@ Why these fields exist in this plugin:
 
 ### WordPress options used
 
-- `kk_bulk_date_updates_version`
-- `kk_bulk_date_updates_logs` is deleted on uninstall as legacy cleanup only
+- `bduk_version`
 
 ### Tables that do not currently exist
 
@@ -270,7 +269,7 @@ The plugin relies entirely on WordPress admin auth:
 
 - screen capability: `manage_options`
 - AJAX capability check: `current_user_can('manage_options')`
-- AJAX nonce: `kk_bulk_date_updates_nonce`
+- AJAX nonce: `bduk_bulk_date_updates_nonce`
 - no `nopriv` action is registered
 
 There is no finer-grained role model or per-post authorization layer in the plugin.
@@ -280,7 +279,7 @@ There is no finer-grained role model or per-post authorization layer in the plug
 The only API surface is WordPress AJAX:
 
 - endpoint: `wp-admin/admin-ajax.php`
-- action: `kk_bulk_date_updates_action`
+- action: `bduk_bulk_date_updates_action`
 
 Response shape from PHP:
 
@@ -407,7 +406,7 @@ This plugin follows several explicit WordPress conventions:
 - internationalization is initialized with `load_plugin_textdomain()`
 - filtering uses core `WP_Query`, `date_query`, and `tax_query`
 - dates are normalized for GMT companion columns with `get_gmt_from_date()`
-- uninstall cleanup uses the Options API
+- `uninstall.php` guards direct access with `WP_UNINSTALL_PLUGIN` and uses the Options API
 
 It also makes one strong non-standard WordPress choice on purpose:
 

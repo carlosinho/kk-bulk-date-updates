@@ -1,0 +1,428 @@
+# Copyright (C) 2026 Karol K
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Bulk Date Updates by KK 0.20\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/kk-bulk-date-updates\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-07-20T13:34:46+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: kk-bulk-date-updates\n"
+
+#. Plugin Name of the plugin
+#: kk-bulk-date-updates.php
+msgid "Bulk Date Updates by KK"
+msgstr ""
+
+#. Description of the plugin
+#: kk-bulk-date-updates.php
+msgid "A WordPress plugin for bulk updating dates across posts and pages."
+msgstr ""
+
+#. Author of the plugin
+#: kk-bulk-date-updates.php
+msgid "Karol K"
+msgstr ""
+
+#. Author URI of the plugin
+#: kk-bulk-date-updates.php
+msgid "https://wpwork.shop/"
+msgstr ""
+
+#: includes/admin/admin-page.php:26
+msgid "Bulk Date Update Settings"
+msgstr ""
+
+#: includes/admin/admin-page.php:35
+msgid "Post Types"
+msgstr ""
+
+#: includes/admin/admin-page.php:49
+msgid "Select which post types to update."
+msgstr ""
+
+#: includes/admin/admin-page.php:49
+msgid "This plugin only works with published content. Draft, private, and pending posts are not affected."
+msgstr ""
+
+#: includes/admin/admin-page.php:55
+msgid "Content Filters"
+msgstr ""
+
+#: includes/admin/admin-page.php:59
+msgid "No Filter (All Content)"
+msgstr ""
+
+#: includes/admin/admin-page.php:60
+msgid "Published Date Range"
+msgstr ""
+
+#: includes/admin/admin-page.php:61
+msgid "Latest/Oldest Posts"
+msgstr ""
+
+#: includes/admin/admin-page.php:62
+msgid "Category/Tag Filter"
+msgstr ""
+
+#: includes/admin/admin-page.php:64
+msgid "Filter which content to include in the bulk update."
+msgstr ""
+
+#: includes/admin/admin-page.php:68
+msgid "Published between:"
+msgstr ""
+
+#: includes/admin/admin-page.php:70
+msgid "and"
+msgstr ""
+
+#: includes/admin/admin-page.php:72
+msgid "Only update content published within this date range."
+msgstr ""
+
+#: includes/admin/admin-page.php:77
+msgid "Update only:"
+msgstr ""
+
+#: includes/admin/admin-page.php:80
+msgid "Latest posts"
+msgstr ""
+
+#: includes/admin/admin-page.php:83
+msgid "Oldest posts"
+msgstr ""
+
+#: includes/admin/admin-page.php:85
+msgid "Limit the update to a specific number of latest or oldest posts."
+msgstr ""
+
+#: includes/admin/admin-page.php:93
+msgid "Categories:"
+msgstr ""
+
+#: includes/admin/admin-page.php:105
+msgid "Tags:"
+msgstr ""
+
+#: includes/admin/admin-page.php:118
+msgid "Pages do not have categories or tags by default."
+msgstr ""
+
+#: includes/admin/admin-page.php:121
+msgid "Select categories or tags to filter content. Hold Ctrl/Cmd to select multiple."
+msgstr ""
+
+#: includes/admin/admin-page.php:128
+msgid "Date Fields"
+msgstr ""
+
+#: includes/admin/admin-page.php:134
+#: kk-bulk-date-updates.php:839
+msgid "Published Date"
+msgstr ""
+
+#: includes/admin/admin-page.php:139
+#: kk-bulk-date-updates.php:840
+msgid "Modified Date"
+msgstr ""
+
+#: includes/admin/admin-page.php:141
+msgid "with"
+msgstr ""
+
+#: includes/admin/admin-page.php:143
+msgid "minutes offset"
+msgstr ""
+
+#: includes/admin/admin-page.php:148
+msgid "Select which date fields to update."
+msgstr ""
+
+#: includes/admin/admin-page.php:149
+msgid "Both date fields are automatically selected and locked when using \"Match Modified to Published\" method."
+msgstr ""
+
+#: includes/admin/admin-page.php:155
+msgid "Update Method"
+msgstr ""
+
+#: includes/admin/admin-page.php:159
+#: kk-bulk-date-updates.php:842
+msgid "Add Days"
+msgstr ""
+
+#: includes/admin/admin-page.php:160
+#: kk-bulk-date-updates.php:843
+msgid "Subtract Days"
+msgstr ""
+
+#: includes/admin/admin-page.php:161
+#: kk-bulk-date-updates.php:844
+msgid "Match Modified to Published"
+msgstr ""
+
+#: includes/admin/admin-page.php:162
+#: kk-bulk-date-updates.php:845
+msgid "Set Specific Date (TBA)"
+msgstr ""
+
+#: includes/admin/admin-page.php:163
+#: kk-bulk-date-updates.php:846
+msgid "Random Date Range (TBA)"
+msgstr ""
+
+#: includes/admin/admin-page.php:165
+msgid "Choose how to update the dates."
+msgstr ""
+
+#: includes/admin/admin-page.php:171
+msgid "Specific Date"
+msgstr ""
+
+#: includes/admin/admin-page.php:176
+msgid "Set the exact date and time."
+msgstr ""
+
+#: includes/admin/admin-page.php:182
+msgid "Number of Days"
+msgstr ""
+
+#: includes/admin/admin-page.php:186
+msgid "Number of days to add or subtract."
+msgstr ""
+
+#: includes/admin/admin-page.php:192
+msgid "Date Range"
+msgstr ""
+
+#: includes/admin/admin-page.php:196
+msgid "to"
+msgstr ""
+
+#: includes/admin/admin-page.php:198
+msgid "Posts will be assigned random dates within this range."
+msgstr ""
+
+#: includes/admin/admin-page.php:204
+msgid "Limit Posts"
+msgstr ""
+
+#: includes/admin/admin-page.php:208
+msgid "Maximum number of posts to update (for safety). This applies after content filters."
+msgstr ""
+
+#: includes/admin/admin-page.php:214
+msgid "Test Mode"
+msgstr ""
+
+#: includes/admin/admin-page.php:219
+msgid "Enable test mode (preview changes without updating)"
+msgstr ""
+
+#: includes/admin/admin-page.php:221
+msgid "Recommended: Test your settings first before making actual changes."
+msgstr ""
+
+#: includes/admin/admin-page.php:234
+#: includes/admin/admin-page.php:357
+msgid "Preview Changes"
+msgstr ""
+
+#: includes/admin/admin-page.php:235
+msgid "Reset Form"
+msgstr ""
+
+#: includes/admin/admin-page.php:241
+msgid "Recent Activity"
+msgstr ""
+
+#: includes/admin/admin-page.php:248
+#: kk-bulk-date-updates.php:547
+msgid "Post"
+msgstr ""
+
+#: includes/admin/admin-page.php:249
+msgid "Fields Updated"
+msgstr ""
+
+#: includes/admin/admin-page.php:250
+msgid "Method"
+msgstr ""
+
+#: includes/admin/admin-page.php:255
+msgid "No recent activity. Perform a bulk update operation to see results here."
+msgstr ""
+
+#: includes/admin/admin-page.php:359
+msgid "Update Dates"
+msgstr ""
+
+#: kk-bulk-date-updates.php:112
+#: kk-bulk-date-updates.php:113
+msgid "Bulk Date Updates"
+msgstr ""
+
+#: kk-bulk-date-updates.php:135
+msgid "Security check failed"
+msgstr ""
+
+#: kk-bulk-date-updates.php:140
+msgid "Insufficient permissions"
+msgstr ""
+
+#: kk-bulk-date-updates.php:170
+msgid "Invalid form data provided"
+msgstr ""
+
+#: kk-bulk-date-updates.php:189
+msgid "No posts found matching the specified criteria"
+msgstr ""
+
+#: kk-bulk-date-updates.php:202
+#, php-format
+msgid "Large bulk operation detected (%d posts). Please increase PHP memory_limit to at least 512M or reduce the number of posts. Current limit: %s"
+msgstr ""
+
+#: kk-bulk-date-updates.php:305
+msgid "Please select at least one date field to update"
+msgstr ""
+
+#: kk-bulk-date-updates.php:316
+msgid "Please enter a valid number of days (minimum 1)"
+msgstr ""
+
+#: kk-bulk-date-updates.php:330
+msgid "Please provide both start and end dates for date range filter"
+msgstr ""
+
+#: kk-bulk-date-updates.php:337
+msgid "Start date must be before end date"
+msgstr ""
+
+#: kk-bulk-date-updates.php:346
+msgid "Please enter a valid number between 1 and 1000 for count limit filter"
+msgstr ""
+
+#: kk-bulk-date-updates.php:355
+msgid "Please select at least one category or tag for category/tag filter"
+msgstr ""
+
+#: kk-bulk-date-updates.php:451
+#, php-format
+msgid "No changes needed for the %d matching posts. Their dates already match the selected update method."
+msgstr ""
+
+#: kk-bulk-date-updates.php:456
+#, php-format
+msgid "Preview generated for %1$d posts (%2$d will be updated)"
+msgstr ""
+
+#: kk-bulk-date-updates.php:535
+msgid "No changes to preview. The matching posts already have the target dates for this update method."
+msgstr ""
+
+#: kk-bulk-date-updates.php:539
+#, php-format
+msgid "Preview: %d posts will be updated"
+msgstr ""
+
+#: kk-bulk-date-updates.php:542
+#, php-format
+msgid "Showing the first %1$d posts that need changes out of %2$d total updates."
+msgstr ""
+
+#: kk-bulk-date-updates.php:548
+msgid "Current Dates"
+msgstr ""
+
+#: kk-bulk-date-updates.php:549
+msgid "New Dates"
+msgstr ""
+
+#: kk-bulk-date-updates.php:554
+#: kk-bulk-date-updates.php:836
+msgid "ID:"
+msgstr ""
+
+#: kk-bulk-date-updates.php:559
+#: kk-bulk-date-updates.php:567
+msgid "Published"
+msgstr ""
+
+#: kk-bulk-date-updates.php:559
+#: kk-bulk-date-updates.php:567
+msgid "Modified"
+msgstr ""
+
+#: kk-bulk-date-updates.php:610
+#, php-format
+msgid "Post ID %d not found"
+msgstr ""
+
+#: kk-bulk-date-updates.php:626
+#, php-format
+msgid "Failed to update post ID %d"
+msgstr ""
+
+#: kk-bulk-date-updates.php:653
+#, php-format
+msgid "Processed %d posts in %d batches with optimized database operations."
+msgstr ""
+
+#: kk-bulk-date-updates.php:661
+#, php-format
+msgid "Successfully updated %d post."
+msgid_plural "Successfully updated %d posts."
+msgstr[0] ""
+msgstr[1] ""
+
+#: kk-bulk-date-updates.php:671
+#, php-format
+msgid "However, %d errors occurred."
+msgstr ""
+
+#: kk-bulk-date-updates.php:687
+msgid "No posts needed updating. The matching posts already have the target dates for this update method."
+msgstr ""
+
+#: kk-bulk-date-updates.php:829
+msgid "Processing..."
+msgstr ""
+
+#: kk-bulk-date-updates.php:830
+msgid "An error occurred"
+msgstr ""
+
+#: kk-bulk-date-updates.php:831
+msgid "Operation completed successfully"
+msgstr ""
+
+#: kk-bulk-date-updates.php:832
+msgid "Are you sure you want to reset all fields?"
+msgstr ""
+
+#: kk-bulk-date-updates.php:833
+msgid "Permission denied. Please refresh the page and try again."
+msgstr ""
+
+#: kk-bulk-date-updates.php:834
+msgid "Server error occurred. Please try again."
+msgstr ""
+
+#: kk-bulk-date-updates.php:835
+msgid "Network connection error. Please check your connection and try again."
+msgstr ""
+
+#: kk-bulk-date-updates.php:837
+msgid "Published:"
+msgstr ""
+
+#: kk-bulk-date-updates.php:838
+msgid "Modified:"
+msgstr ""
