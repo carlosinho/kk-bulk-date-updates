@@ -13,7 +13,15 @@ if (!defined('ABSPATH')) {
 ?>
 
 <div class="wrap bduk-admin">
-    <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+    <div class="bduk-admin__header">
+        <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+        <img
+            src="<?php echo esc_url(BDUK_PLUGIN_URL . 'images/chronocrow.png'); ?>"
+            alt="Chronocrow Bulk Date Updates"
+            class="bduk-admin__logo"
+            width="48"
+        />
+    </div>
     
     <?php /*
     <div class="notice notice-info">

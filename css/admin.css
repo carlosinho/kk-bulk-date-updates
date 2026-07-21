@@ -11,9 +11,22 @@
     margin: 20px 0;
 }
 
-.bduk-admin h1 {
+.bduk-admin__header {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 20px;
+}
+
+.bduk-admin__header h1 {
+    margin: 0;
     color: #23282d;
+}
+
+.bduk-admin__logo {
+    width: 48px;
+    height: auto;
+    flex-shrink: 0;
 }
 
 /* Form styles */

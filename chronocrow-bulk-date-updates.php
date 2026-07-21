@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Chronocrow Bulk Date Updates
  * Description: A WordPress plugin for bulk updating dates across posts and pages.
- * Version: 0.30
+ * Version: 0.31
  * Author: Karol K
  * Author URI: https://wpwork.shop/
  * License: GPL v2 or later
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants.
-define('BDUK_VERSION', '0.30');
+define('BDUK_VERSION', '0.31');
 define('BDUK_PLUGIN_FILE', __FILE__);
 define('BDUK_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('BDUK_PLUGIN_PATH', plugin_dir_path(__FILE__));
