@@ -77,7 +77,7 @@ The plugin is usable as an admin-only bulk date maintenance tool for published W
   - The current class names and prefixes ("bduk") don't need to change.
   - The tips from PLUGIN_REVIEW_TIPS.md should be taken into account when doing this move.
 - [ ] Prep plugin for WordPress.org submission.
-  - PCP tests.
+  - Go through PCP tests.
 - [ ] Deploy to WordPress.org SVN.
 
 ### Backlog / Future

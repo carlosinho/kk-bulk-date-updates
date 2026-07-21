@@ -2,7 +2,7 @@
 Contributors: karol-k
 Tags: dates, bulk edit, posts, admin, maintenance
 Requires at least: 6.0
-Tested up to: 7.0.2
+Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 0.31
 License: GPLv2 or later
